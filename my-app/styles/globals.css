@@ -127,6 +127,13 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Brand colors for Tailwind */
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-dark-blue: var(--brand-dark-blue);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-light: var(--brand-light);
 }
 
 @layer base {
@@ -218,6 +225,39 @@ html {
   line-height: 1.6;
 }
 
+/* Brand color utilities */
+.text-brand-teal {
+  color: var(--brand-teal);
+}
+
+.text-brand-dark {
+  color: var(--brand-dark);
+}
+
+.text-brand-dark-blue {
+  color: var(--brand-dark-blue);
+}
+
+.text-brand-accent {
+  color: var(--brand-accent);
+}
+
+.bg-brand-teal {
+  background-color: var(--brand-teal);
+}
+
+.bg-brand-dark {
+  background-color: var(--brand-dark);
+}
+
+.bg-brand-dark-blue {
+  background-color: var(--brand-dark-blue);
+}
+
+.bg-brand-light {
+  background-color: var(--brand-light);
+}
+
 /* Gradient utilities */
 .bg-brand-gradient {
   background: linear-gradient(135deg, var(--brand-teal) 0%, var(--brand-dark-blue) 100%);
@@ -244,6 +284,47 @@ html {
 
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* Animation delays */
+.animation-delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animation-delay-400 {
+  animation-delay: 0.4s;
+}
+
+.animation-delay-600 {
+  animation-delay: 0.6s;
+}
+
+.animation-delay-800 {
+  animation-delay: 0.8s;
+}
+
+/* Partner slider animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 25s linear infinite;
+  width: calc(200% + 4rem);
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Smooth scroll effect for the partner cards */
+.animate-scroll > div {
+  transition: transform 0.3s ease-in-out;
 }
 
 /* Hover effects */

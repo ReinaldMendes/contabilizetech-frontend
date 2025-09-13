@@ -14,8 +14,8 @@ import {
   BarChart3,
   Calendar
 } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import logoIcon from "figma:asset/4ea0bd7a9b1f8b2bbb511255bac94715ee52ab3d.png";
 
 const navigation = [
   { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
@@ -33,12 +33,12 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children }: AdminLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const pathname = usePathname();
-  const router = useRouter();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("admin_token");
-    router.push("/admin/login");
+    navigate("/admin/login");
   };
 
   return (
@@ -46,9 +46,15 @@ export function AdminLayout({ children }: AdminLayoutProps) {
       {/* Sidebar */}
       <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
         <div className="flex items-center justify-between h-16 px-6 border-b">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded bg-brand-gradient"></div>
-            <span className="text-lg font-semibold text-brand-dark">ContabilizeTech</span>
+          <div className="flex items-center space-x-3">
+            <img 
+              src={logoIcon} 
+              alt="ContabilizeTech" 
+              className="h-8 w-8"
+            />
+            <span className="text-lg font-semibold text-brand-dark">
+              Contabilize<span className="text-brand-teal">Tech</span>
+            </span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -61,11 +67,11 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         <nav className="mt-6 px-4">
           <div className="space-y-2">
             {navigation.map((item) => {
-              const isActive = pathname === item.href;
+              const isActive = location.pathname === item.href;
               return (
                 <Link
                   key={item.name}
-                  href={item.href}
+                  to={item.href}
                   className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
                     isActive
                       ? 'bg-brand-gradient text-white'

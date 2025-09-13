@@ -1,23 +1,40 @@
-import { Header } from "./components/Header";
-import { Hero } from "./components/Hero";
-import { Features } from "./components/Features";
-import { Plans } from "./components/Plans";
-import { Testimonials } from "./components/Testimonials";
-import { FAQ } from "./components/FAQ";
-import { Footer } from "./components/Footer";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./src/contexts/AuthContext";
+import { EditProvider } from "./src/contexts/EditContext";
+
+// Import page components
+import HomePage from "./src/app/page";
+import AdminLoginPage from "./src/app/admin/login/page";
+import AdminRegisterPage from "./src/app/admin/register/page";
+import AdminForgotPasswordPage from "./src/app/admin/forgot-password/page";
+
+// Import CSS
+import "./styles/globals.css";
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      <main>
-        <Hero />
-        <Features />
-        <Plans />
-        <Testimonials />
-        <FAQ />
-      </main>
-      <Footer />
-    </div>
+    <AuthProvider>
+      <EditProvider>
+        <Router>
+          <Routes>
+            {/* Main landing page - with inline editing when logged in */}
+            <Route path="/" element={<HomePage />} />
+            
+            {/* Authentication routes */}
+            <Route path="/login" element={<AdminLoginPage />} />
+            <Route path="/register" element={<AdminRegisterPage />} />
+            <Route path="/forgot-password" element={<AdminForgotPasswordPage />} />
+            
+            {/* Legacy admin routes - redirect to home */}
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/admin/register" element={<AdminRegisterPage />} />
+            <Route path="/admin/forgot-password" element={<AdminForgotPasswordPage />} />
+            
+            {/* Fallback for any other routes */}
+            <Route path="*" element={<HomePage />} />
+          </Routes>
+        </Router>
+      </EditProvider>
+    </AuthProvider>
   );
 }

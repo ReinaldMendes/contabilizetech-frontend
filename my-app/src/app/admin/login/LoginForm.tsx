@@ -7,9 +7,11 @@ import { Label } from "../../../../components/ui/label";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Alert, AlertDescription } from "../../../../components/ui/alert";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../../contexts/AuthContext";
 
 export function LoginForm() {
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,24 +20,26 @@ export function LoginForm() {
     password: ""
   });
   
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    // Simulate API call
-    setTimeout(() => {
-      if (formData.email === "admin@contabilizetech.com.br" && formData.password === "admin123") {
-        // Simulate successful login
-        localStorage.setItem("admin_token", "mock_token");
-        router.push("/admin/dashboard");
+    try {
+      const success = await login(formData.email, formData.password);
+      if (success) {
+        // Redirect to home page with editing capability
+        navigate("/");
       } else {
         setError("Email ou senha incorretos");
       }
+    } catch (error) {
+      setError("Erro ao fazer login. Tente novamente.");
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -103,13 +107,36 @@ export function LoginForm() {
           </Button>
         </form>
         
-        <div className="mt-6 text-center">
-          <p className="text-sm text-gray-600 mb-4">
-            Credenciais de demonstração:
-          </p>
-          <div className="text-xs text-gray-500 space-y-1">
-            <p><strong>Email:</strong> admin@contabilizetech.com.br</p>
-            <p><strong>Senha:</strong> admin123</p>
+        <div className="mt-6">
+          <div className="flex items-center justify-between mb-4">
+            <Link 
+              to="/forgot-password"
+              className="text-sm text-brand-teal hover:text-brand-dark-blue transition-colors"
+            >
+              Esqueceu sua senha?
+            </Link>
+          </div>
+          
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-2">
+              Não tem uma conta?{' '}
+              <Link 
+                to="/register"
+                className="text-brand-teal hover:text-brand-dark-blue font-medium transition-colors"
+              >
+                Cadastre-se
+              </Link>
+            </p>
+          </div>
+          
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <p className="text-sm text-gray-600 mb-2">
+              <strong>Credenciais de demonstração:</strong>
+            </p>
+            <div className="text-xs text-gray-500 space-y-1">
+              <p><strong>Email:</strong> admin@contabilizetech.com.br</p>
+              <p><strong>Senha:</strong> admin123</p>
+            </div>
           </div>
         </div>
       </CardContent>

@@ -9,19 +9,26 @@ import {
   Instagram,
   Youtube
 } from "lucide-react";
+import logoIcon from "figma:asset/4ea0bd7a9b1f8b2bbb511255bac94715ee52ab3d.png";
 
 export function Footer() {
   return (
-    <footer className="bg-brand-dark text-white">
+    <footer id="contact" className="bg-brand-dark text-white">
       <div className="container mx-auto max-w-6xl px-6">
         {/* Main Footer Content */}
         <div className="py-16">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* Company Info */}
             <div className="lg:col-span-2">
-              <div className="flex items-center space-x-2 mb-6">
-                <div className="h-8 w-8 rounded bg-brand-gradient"></div>
-                <span className="text-xl font-semibold">ContabilizeTech</span>
+              <div className="flex items-center space-x-3 mb-6">
+                <img 
+                  src={logoIcon} 
+                  alt="ContabilizeTech" 
+                  className="h-10 w-10 filter brightness-0 invert"
+                />
+                <span className="text-xl font-semibold text-white">
+                  Contabilize<span className="text-brand-teal">Tech</span>
+                </span>
               </div>
               
               <p className="text-gray-300 mb-6 leading-relaxed max-w-md">
@@ -32,15 +39,15 @@ export function Footer() {
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">contato@contabilizetech.com.br</span>
+                  <span className="text-gray-300">comercial@contabilizetech.com.br</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">(11) 99999-9999</span>
+                  <span className="text-gray-300">(42) 99820-2183</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">São Paulo, SP - Brasil</span>
+                  <span className="text-gray-300">Rua Riachuelo, 129, sala 1</span>
                 </div>
               </div>
             </div>
@@ -131,6 +138,7 @@ export function Footer() {
             
             {/* Social Links */}
             <div className="flex items-center space-x-4">
+              <span className="text-sm text-gray-400 mr-2">@contabilizetech</span>
               <a 
                 href="#" 
                 className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors"
@@ -141,23 +149,9 @@ export function Footer() {
               <a 
                 href="#" 
                 className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a 
-                href="#" 
-                className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram className="h-5 w-5" />
-              </a>
-              <a 
-                href="#" 
-                className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors"
-                aria-label="YouTube"
-              >
-                <Youtube className="h-5 w-5" />
               </a>
             </div>
           </div>
