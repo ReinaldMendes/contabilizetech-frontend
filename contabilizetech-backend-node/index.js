@@ -10,7 +10,6 @@ import userRoutes from './src/routes/userRoutes.js';
 
 const app = express();
 
-// Conectamos ao banco de dados
 connectDB();
 
 // Middlewares
