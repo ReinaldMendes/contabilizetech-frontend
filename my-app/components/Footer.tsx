@@ -1,15 +1,13 @@
-import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
+import { EditableText } from "./EditableText";
 import { 
   Mail, 
   Phone, 
   MapPin, 
   Linkedin, 
-  Twitter, 
-  Instagram,
-  Youtube
+  Instagram
 } from "lucide-react";
-import logoIcon from "figma:asset/4ea0bd7a9b1f8b2bbb511255bac94715ee52ab3d.png";
+import Image from 'next/image';
 
 export function Footer() {
   return (
@@ -21,9 +19,11 @@ export function Footer() {
             {/* Company Info */}
             <div className="lg:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
-                <img 
-                  src={logoIcon} 
+                <Image 
+                  src="/img/contabilizetech_logo.png" 
                   alt="ContabilizeTech" 
+                  width={40}
+                  height={40}
                   className="h-10 w-10 filter brightness-0 invert"
                 />
                 <span className="text-xl font-semibold text-white">
@@ -32,87 +32,80 @@ export function Footer() {
               </div>
               
               <p className="text-gray-300 mb-6 leading-relaxed max-w-md">
-                Transformamos a gestão contábil das empresas com tecnologia de ponta 
-                e expertise especializada. Sua empresa mais eficiente, nossa missão.
+                <EditableText
+                  contentKey="footer.description"
+                  fallback="Transformamos a gestão contábil das empresas com tecnologia de ponta e expertise especializada. Sua empresa mais eficiente, nossa missão."
+                  type="textarea"
+                />
               </p>
               
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Mail className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">comercial@contabilizetech.com.br</span>
+                  <span className="text-gray-300">
+                    <EditableText
+                      contentKey="footer.contact.email"
+                      fallback="comercial@contabilizetech.com.br"
+                      as="span"
+                    />
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">(42) 99820-2183</span>
+                  <span className="text-gray-300">
+                    <EditableText
+                      contentKey="footer.contact.phone"
+                      fallback="(42) 99820-2183"
+                      as="span"
+                    />
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">Rua Riachuelo, 129, sala 1</span>
+                  <span className="text-gray-300">
+                    <EditableText
+                      contentKey="footer.contact.address"
+                      fallback="Rua Riachuelo, 129, sala 1"
+                      as="span"
+                    />
+                  </span>
                 </div>
               </div>
             </div>
             
             {/* Services */}
             <div>
-              <h3 className="font-semibold mb-6">Serviços</h3>
+              <h3 className="font-semibold mb-6">
+                <EditableText
+                  contentKey="footer.services.title"
+                  fallback="Serviços"
+                  as="span"
+                />
+              </h3>
               <ul className="space-y-3 text-gray-300">
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Contabilidade Digital
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Obrigações Fiscais
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Gestão Financeira
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Consultoria Empresarial
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Relatórios Gerenciais
-                  </a>
-                </li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item1" fallback="Contabilidade Digital" as="span" /></a></li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item2" fallback="Obrigações Fiscais" as="span" /></a></li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item3" fallback="Gestão Financeira" as="span" /></a></li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item4" fallback="Consultoria Empresarial" as="span" /></a></li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item5" fallback="Relatórios Gerenciais" as="span" /></a></li>
               </ul>
             </div>
             
             {/* Company */}
             <div>
-              <h3 className="font-semibold mb-6">Empresa</h3>
+              <h3 className="font-semibold mb-6">
+                <EditableText
+                  contentKey="footer.company.title"
+                  fallback="Empresa"
+                  as="span"
+                />
+              </h3>
               <ul className="space-y-3 text-gray-300">
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Sobre nós
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Nossa equipe
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Carreira
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Blog
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:text-brand-teal transition-colors">
-                    Imprensa
-                  </a>
-                </li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item1" fallback="Sobre nós" as="span" /></a></li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item2" fallback="Nossa equipe" as="span" /></a></li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item3" fallback="Carreira" as="span" /></a></li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item4" fallback="Blog" as="span" /></a></li>
+                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item5" fallback="Imprensa" as="span" /></a></li>
               </ul>
             </div>
           </div>
@@ -125,32 +118,24 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             {/* Legal Links */}
             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-brand-teal transition-colors">
-                Política de Privacidade
-              </a>
-              <a href="#" className="hover:text-brand-teal transition-colors">
-                Termos de Uso
-              </a>
-              <a href="#" className="hover:text-brand-teal transition-colors">
-                LGPD
-              </a>
+              <a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.legal.privacy" fallback="Política de Privacidade" as="span" /></a>
+              <a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.legal.terms" fallback="Termos de Uso" as="span" /></a>
+              <a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.legal.lgpd" fallback="LGPD" as="span" /></a>
             </div>
             
             {/* Social Links */}
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-400 mr-2">@contabilizetech</span>
-              <a 
-                href="#" 
-                className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors"
-                aria-label="LinkedIn"
-              >
+              <span className="text-sm text-gray-400 mr-2">
+                <EditableText
+                  contentKey="footer.social.handle"
+                  fallback="@contabilizetech"
+                  as="span"
+                />
+              </span>
+              <a href="#" className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5" />
               </a>
-              <a 
-                href="#" 
-                className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors"
-                aria-label="Instagram"
-              >
+              <a href="#" className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
             </div>
@@ -159,7 +144,11 @@ export function Footer() {
           {/* Copyright */}
           <div className="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
             <p>
-              © 2024 ContabilizeTech. Todos os direitos reservados. CNPJ: 00.000.000/0001-00
+              <EditableText
+                contentKey="footer.copyright"
+                fallback="© 2024 ContabilizeTech. Todos os direitos reservados. CNPJ: 00.000.000/0001-00"
+                as="span"
+              />
             </p>
           </div>
         </div>

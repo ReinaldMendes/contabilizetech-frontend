@@ -12,14 +12,18 @@ import {
   Eye, 
   EyeOff,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  RefreshCw
 } from 'lucide-react';
-import { useAuth } from '../src/contexts/AuthContext';
-import { useEdit } from '../src/contexts/EditContext';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { useEdit } from '@/contexts/EditContext';
+import { useContent } from '@/contexts/ContentContext';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export function AdminBar() {
   const { user, logout } = useAuth();
+  const { refreshContent } = useContent();
   const { 
     isEditMode, 
     setEditMode, 
@@ -27,8 +31,9 @@ export function AdminBar() {
     saveChanges 
   } = useEdit();
   const [isSaving, setIsSaving] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const navigate = useNavigate();
+  const router = useRouter();
 
   if (!user) return null;
 
@@ -49,12 +54,26 @@ export function AdminBar() {
     try {
       await saveChanges();
       setSaveStatus('success');
+      toast.success('Todas as alterações foram salvas!');
       setTimeout(() => setSaveStatus('idle'), 3000);
     } catch (error) {
       setSaveStatus('error');
+      toast.error('Erro ao salvar alterações. Tente novamente.');
       setTimeout(() => setSaveStatus('idle'), 5000);
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleRefresh = async () => {
+    setIsRefreshing(true);
+    try {
+      await refreshContent();
+      toast.success('Conteúdo recarregado!');
+    } catch (error) {
+      toast.error('Erro ao recarregar conteúdo.');
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -66,12 +85,11 @@ export function AdminBar() {
       if (!confirmLogout) return;
     }
     logout();
-    navigate('/');
+    router.push('/');
   };
 
   const handleSettings = () => {
-    // TODO: Add settings modal or panel for admin configuration
-    alert('Configurações em breve! Use os controles de edição inline para modificar o conteúdo do site.');
+    toast.info('Use os controles de edição inline para modificar o conteúdo do site. Passe o mouse sobre os textos no modo de edição.');
   };
 
   return (
@@ -131,6 +149,17 @@ export function AdminBar() {
               <Button
                 variant="ghost"
                 size="sm"
+                onClick={handleRefresh}
+                disabled={isRefreshing}
+                className="text-white hover:bg-brand-teal/20 h-8"
+                title="Recarregar conteúdo"
+              >
+                <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+              </Button>
+
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={handleToggleEditMode}
                 className="text-white hover:bg-brand-teal/20 h-8"
               >
@@ -169,7 +198,7 @@ export function AdminBar() {
                 className="text-white hover:bg-brand-teal/20 h-8"
               >
                 <Settings className="h-4 w-4 mr-1" />
-                <span className="hidden sm:inline">Configurações</span>
+                <span className="hidden sm:inline">Ajuda</span>
               </Button>
 
               <Button

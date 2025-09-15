@@ -4,8 +4,8 @@ import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { ScheduleModal } from "./ScheduleModal";
-import logoIcon from "figma:asset/4ea0bd7a9b1f8b2bbb511255bac94715ee52ab3d.png";
-import { Link } from "react-router-dom";
+import Image from 'next/image'; // 1. Import do componente Image do Next.js
+import Link from 'next/link';   // 2. Import do componente Link do Next.js
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,9 +17,12 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center space-x-3">
-            <img 
-              src={logoIcon} 
-              alt="ContabilizeTech" 
+            {/* 1. Uso do componente Image otimizado */}
+            <Image 
+              src="/img/contabilizetech_logo.png" // Assumindo que a imagem está em public/images/
+              alt="ContabilizeTech Logo"
+              width={40}
+              height={40}
               className="h-10 w-10"
             />
             <span className="text-xl font-semibold text-brand-dark">
@@ -63,7 +66,8 @@ export function Header() {
 
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link to="/admin/login">
+            {/* 2. Uso do Link do Next.js com a prop 'href' */}
+            <Link href="/admin/login">
               <Button 
                 variant="ghost" 
                 size="sm" 
@@ -99,41 +103,11 @@ export function Header() {
         {isMenuOpen && (
           <div className="md:hidden border-t bg-white">
             <nav className="flex flex-col space-y-4 p-6">
-              <a 
-                href="#services" 
-                className="text-sm font-medium text-gray-700 hover:text-brand-teal transition-colors cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-                  setIsMenuOpen(false);
-                }}
-              >
-                Serviços
-              </a>
-              <a 
-                href="#quem-somos" 
-                className="text-sm font-medium text-gray-700 hover:text-brand-teal transition-colors cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('quem-somos')?.scrollIntoView({ behavior: 'smooth' });
-                  setIsMenuOpen(false);
-                }}
-              >
-                Quem Somos
-              </a>
-              <a 
-                href="#contact" 
-                className="text-sm font-medium text-gray-700 hover:text-brand-teal transition-colors cursor-pointer"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                  setIsMenuOpen(false);
-                }}
-              >
-                Contato
-              </a>
+              <a href="#services" /* ... */ >Serviços</a>
+              <a href="#quem-somos" /* ... */ >Quem Somos</a>
+              <a href="#contact" /* ... */ >Contato</a>
               <div className="flex flex-col space-y-2 pt-4 border-t">
-                <Link to="/admin/login">
+                <Link href="/admin/login">
                   <Button 
                     variant="ghost" 
                     size="sm" 

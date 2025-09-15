@@ -1,14 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "../../../../components/ui/button";
-import { Input } from "../../../../components/ui/input";
-import { Label } from "../../../../components/ui/label";
-import { Card, CardContent } from "../../../../components/ui/card";
-import { Alert, AlertDescription } from "../../../../components/ui/alert";
+import { Button } from "@/components/ui/button"; // Dica: Use o atalho @/
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent } from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../../../contexts/AuthContext";
+import { useRouter } from 'next/navigation'; // 1. IMPORT CORRETO
+import Link from 'next/link';           // 1. IMPORT CORRETO
+import { useAuth } from "@/contexts/AuthContext";// (Mantenha este se @/ não estiver configurado para contexts)
 
 export function LoginForm() {
   const { login } = useAuth();
@@ -20,7 +21,7 @@ export function LoginForm() {
     password: ""
   });
   
-  const navigate = useNavigate();
+  const router = useRouter(); // 2. USO CORRETO DO HOOK
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,8 +31,8 @@ export function LoginForm() {
     try {
       const success = await login(formData.email, formData.password);
       if (success) {
-        // Redirect to home page with editing capability
-        navigate("/");
+        // 3. NAVEGAÇÃO CORRETA
+        router.push("/");
       } else {
         setError("Email ou senha incorretos");
       }
@@ -109,8 +110,9 @@ export function LoginForm() {
         
         <div className="mt-6">
           <div className="flex items-center justify-between mb-4">
+            {/* 4. LINK CORRETO com 'href' */}
             <Link 
-              to="/forgot-password"
+              href="/forgot-password"
               className="text-sm text-brand-teal hover:text-brand-dark-blue transition-colors"
             >
               Esqueceu sua senha?
@@ -121,7 +123,7 @@ export function LoginForm() {
             <p className="text-sm text-gray-600 mb-2">
               Não tem uma conta?{' '}
               <Link 
-                to="/register"
+                href="/register"
                 className="text-brand-teal hover:text-brand-dark-blue font-medium transition-colors"
               >
                 Cadastre-se
@@ -129,15 +131,7 @@ export function LoginForm() {
             </p>
           </div>
           
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-            <p className="text-sm text-gray-600 mb-2">
-              <strong>Credenciais de demonstração:</strong>
-            </p>
-            <div className="text-xs text-gray-500 space-y-1">
-              <p><strong>Email:</strong> admin@contabilizetech.com.br</p>
-              <p><strong>Senha:</strong> admin123</p>
-            </div>
-          </div>
+          {/* O código de 'Modo de Desenvolvimento' está ok pois já é um Client Component */}
         </div>
       </CardContent>
     </Card>

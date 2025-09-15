@@ -1,4 +1,5 @@
 import { Card, CardContent } from "./ui/card";
+import { EditableText } from "./EditableText";
 import { 
   Calculator,
   Scale,
@@ -11,33 +12,45 @@ import {
 const services = [
   {
     icon: Calculator,
-    title: "Contabilidade Completa",
-    description: "Planejamento tributário, obrigações fiscais e gestão financeira."
+    titleKey: "services.item1.title",
+    descriptionKey: "services.item1.description",
+    titleFallback: "Contabilidade Completa",
+    descriptionFallback: "Planejamento tributário, obrigações fiscais e gestão financeira."
   },
   {
     icon: Scale,
-    title: "Assessoria Jurídica",
-    description: "Contratos, compliance, governança e suporte estratégico em negociações."
+    titleKey: "services.item2.title",
+    descriptionKey: "services.item2.description",
+    titleFallback: "Assessoria Jurídica",
+    descriptionFallback: "Contratos, compliance, governança e suporte estratégico em negociações."
   },
   {
     icon: Shield,
-    title: "Governança Corporativa",
-    description: "Estruturação de conselhos, boas práticas e acompanhamento regulatório."
+    titleKey: "services.item3.title",
+    descriptionKey: "services.item3.description",
+    titleFallback: "Governança Corporativa",
+    descriptionFallback: "Estruturação de conselhos, boas práticas e acompanhamento regulatório."
   },
   {
     icon: TrendingUp,
-    title: "Smart Money para Startups",
-    description: "Orientação estratégica, marketplace, captação de recursos e preparação para IPO."
+    titleKey: "services.item4.title",
+    descriptionKey: "services.item4.description",
+    titleFallback: "Smart Money para Startups",
+    descriptionFallback: "Orientação estratégica, marketplace, captação de recursos e preparação para IPO."
   },
   {
     icon: Building2,
-    title: "Consultoria para Franquias",
-    description: "Expansão de unidades, gestão tributária e suporte jurídico especializado."
+    titleKey: "services.item5.title",
+    descriptionKey: "services.item5.description",
+    titleFallback: "Consultoria para Franquias",
+    descriptionFallback: "Expansão de unidades, gestão tributária e suporte jurídico especializado."
   },
   {
     icon: Users,
-    title: "Acompanhamento Estratégico",
-    description: "Presença em reuniões, apoio em ajustes contratuais e equilíbrio de interesses entre stakeholders."
+    titleKey: "services.item6.title",
+    descriptionKey: "services.item6.description",
+    titleFallback: "Acompanhamento Estratégico",
+    descriptionFallback: "Presença em reuniões, apoio em ajustes contratuais e equilíbrio de interesses entre stakeholders."
   }
 ];
 
@@ -48,11 +61,18 @@ export function Services() {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-h2 text-brand-dark mb-4">
-            Nossos Serviços
+            <EditableText
+              contentKey="services.title"
+              fallback="Nossos Serviços"
+              as="span"
+            />
           </h2>
           <p className="text-body text-gray-600 max-w-2xl mx-auto">
-            Soluções integradas para startups e franquias, do planejamento estratégico 
-            à execução, garantindo conformidade e crescimento sustentável.
+            <EditableText
+              contentKey="services.description"
+              fallback="Soluções integradas para startups e franquias, do planejamento estratégico à execução, garantindo conformidade e crescimento sustentável."
+              type="textarea"
+            />
           </p>
         </div>
 
@@ -71,11 +91,19 @@ export function Services() {
                 </div>
                 
                 <h3 className="text-xl font-semibold text-brand-dark mb-3 group-hover:text-brand-teal transition-colors">
-                  {service.title}
+                  <EditableText
+                    contentKey={service.titleKey}
+                    fallback={service.titleFallback}
+                    as="span"
+                  />
                 </h3>
                 
                 <p className="text-body text-gray-600 leading-relaxed">
-                  {service.description}
+                  <EditableText
+                    contentKey={service.descriptionKey}
+                    fallback={service.descriptionFallback}
+                    type="textarea"
+                  />
                 </p>
               </CardContent>
             </Card>

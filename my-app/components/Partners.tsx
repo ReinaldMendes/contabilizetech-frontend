@@ -1,40 +1,27 @@
-import contabilizeTechLogo from "figma:asset/f263e5b4d8ee0de24ded0d8420e566b956eea681.png";
-import vidaExamesLogo from "figma:asset/49de0d722a4efa635d05ee472a8b6374f71dabe3.png";
-import agilizzaLogo from "figma:asset/2f3f7d4350e467bdf4431652dd46666752517a37.png";
+import Image from 'next/image';
 
+// 1. O array agora contém os caminhos diretos para as imagens na pasta /public
 const partners = [
-  {
-    name: "ContabilizeTech",
-    logo: contabilizeTechLogo,
-    alt: "ContabilizeTech Logo"
+  { 
+    src: '/img/logo-contabilizetech.png', 
+    alt: 'ContabilizeTech Logo' 
   },
-  {
-    name: "Laboratório VIDA EXAMES",
-    logo: vidaExamesLogo,
-    alt: "Laboratório VIDA EXAMES Logo"
+  { 
+    src: '/img/logo-vida-exames.png', 
+    alt: 'Laboratório VIDA EXAMES Logo' 
   },
-  {
-    name: "AGILIZZA SERVIÇOS",
-    logo: agilizzaLogo,
-    alt: "AGILIZZA SERVIÇOS Logo"
+  { 
+    src: '/img/logo-agilizza.png', 
+    alt: 'AGILIZZA SERVIÇOS Logo' 
   },
-  // Duplicamos os logos para o efeito infinito
-  {
-    name: "ContabilizeTech",
-    logo: contabilizeTechLogo,
-    alt: "ContabilizeTech Logo"
-  },
-  {
-    name: "Laboratório VIDA EXAMES",
-    logo: vidaExamesLogo,
-    alt: "Laboratório VIDA EXAMES Logo"
-  },
-  {
-    name: "AGILIZZA SERVIÇOS",
-    logo: agilizzaLogo,
-    alt: "AGILIZZA SERVIÇOS Logo"
+  { 
+    src: '/img/odonto_excellence_transparente.png', 
+    alt: 'ODONTO EXCELLENCE Logo' 
   }
 ];
+
+// Duplicamos os logos para o efeito de slider infinito
+const extendedPartners = [...partners, ...partners];
 
 export function Partners() {
   return (
@@ -54,15 +41,19 @@ export function Partners() {
         {/* Partners Slider */}
         <div className="relative overflow-hidden">
           <div className="flex animate-scroll">
-            {partners.map((partner, index) => (
+            {extendedPartners.map((partner, index) => (
               <div 
                 key={index}
-                className="flex-shrink-0 mx-8 w-48 h-24 flex items-center justify-center bg-white rounded-lg shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                // 2. Adicionamos 'relative' para o <Image> com 'fill' funcionar
+                className="relative flex-shrink-0 mx-8 w-48 h-24 flex items-center justify-center bg-white rounded-lg shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
               >
-                <img
-                  src={partner.logo}
+                {/* 3. Substituímos <img> por <Image> do Next.js */}
+                <Image
+                  src={partner.src}
                   alt={partner.alt}
-                  className="max-h-16 max-w-40 object-contain hover:scale-110 transition-all duration-300"
+                  fill
+                  style={{ objectFit: 'contain' }} // Garante que o logo caiba sem distorcer
+                  className="px-4 hover:scale-110 transition-all duration-300"
                 />
               </div>
             ))}

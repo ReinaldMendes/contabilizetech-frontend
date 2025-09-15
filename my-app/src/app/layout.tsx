@@ -1,6 +1,9 @@
 import '../../styles/globals.css';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { ContentProvider } from '@/contexts/ContentContext';
+import { EditProvider } from '@/contexts/EditContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -24,20 +27,29 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.Node;
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <AuthProvider>
+          <ContentProvider>
+            <EditProvider>
+              {children}
+            </EditProvider>
+          </ContentProvider>
+        </AuthProvider>
+      </body>
     </html>
   );
 }

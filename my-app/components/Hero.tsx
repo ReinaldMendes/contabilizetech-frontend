@@ -1,6 +1,7 @@
 import { Button } from "./ui/button";
 import { Play, ArrowRight } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { EditableImage } from "./EditableImage";
+import { EditableText } from "./EditableText";
 
 export function Hero() {
   return (
@@ -10,14 +11,19 @@ export function Hero() {
           {/* Content */}
           <div className="animate-fade-in-up">
             <h1 className="text-hero text-brand-dark mb-6">
-              Soluções contábeis{" "}
-              <span className="text-brand-gradient">automatizadas</span>{" "}
-              para sua empresa crescer
+              <EditableText
+                contentKey="hero.title"
+                fallback="Soluções contábeis automatizadas para sua empresa crescer"
+                as="span"
+              />
             </h1>
             
             <p className="text-body text-gray-600 mb-8 max-w-lg">
-              Automatize sua contabilidade com tecnologia de ponta. 
-              Mais tempo para focar no que realmente importa: o crescimento do seu negócio.
+              <EditableText
+                contentKey="hero.description"
+                fallback="Automatize sua contabilidade com tecnologia de ponta. Mais tempo para focar no que realmente importa: o crescimento do seu negócio."
+                type="textarea"
+              />
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4">
@@ -25,7 +31,11 @@ export function Hero() {
                 size="lg" 
                 className="bg-brand-gradient hover:opacity-90 group"
               >
-                Agende uma demo
+                <EditableText
+                  contentKey="hero.cta.primary"
+                  fallback="Agende uma demo"
+                  as="span"
+                />
                 <Play className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
               
@@ -34,7 +44,11 @@ export function Hero() {
                 size="lg" 
                 className="border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white group"
               >
-                Ver planos
+                <EditableText
+                  contentKey="hero.cta.secondary"
+                  fallback="Ver planos"
+                  as="span"
+                />
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
@@ -42,16 +56,52 @@ export function Hero() {
             {/* Stats */}
             <div className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-gray-200">
               <div>
-                <div className="text-2xl font-semibold text-brand-teal">500+</div>
-                <div className="text-sm text-gray-600">Empresas atendidas</div>
+                <div className="text-2xl font-semibold text-brand-teal">
+                  <EditableText
+                    contentKey="hero.stats.companies.number"
+                    fallback="500+"
+                    as="span"
+                  />
+                </div>
+                <div className="text-sm text-gray-600">
+                  <EditableText
+                    contentKey="hero.stats.companies.label"
+                    fallback="Empresas atendidas"
+                    as="span"
+                  />
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-semibold text-brand-teal">98%</div>
-                <div className="text-sm text-gray-600">Satisfação</div>
+                <div className="text-2xl font-semibold text-brand-teal">
+                  <EditableText
+                    contentKey="hero.stats.satisfaction.number"
+                    fallback="98%"
+                    as="span"
+                  />
+                </div>
+                <div className="text-sm text-gray-600">
+                  <EditableText
+                    contentKey="hero.stats.satisfaction.label"
+                    fallback="Satisfação"
+                    as="span"
+                  />
+                </div>
               </div>
               <div>
-                <div className="text-2xl font-semibold text-brand-teal">24h</div>
-                <div className="text-sm text-gray-600">Suporte</div>
+                <div className="text-2xl font-semibold text-brand-teal">
+                  <EditableText
+                    contentKey="hero.stats.support.number"
+                    fallback="24h"
+                    as="span"
+                  />
+                </div>
+                <div className="text-sm text-gray-600">
+                  <EditableText
+                    contentKey="hero.stats.support.label"
+                    fallback="Suporte"
+                    as="span"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -59,8 +109,9 @@ export function Hero() {
           {/* Image */}
           <div className="relative">
             <div className="relative z-10">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1692133226337-55e513450a32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMGFjY291bnRpbmclMjB0ZWNobm9sb2d5JTIwb2ZmaWNlfGVufDF8fHx8MTc1NzAxNDU1MHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+              <EditableImage
+                contentKey="hero.image"
+                fallback="/img/hero-image.png"
                 alt="Equipe ContabilizeTech trabalhando com tecnologia"
                 className="rounded-2xl shadow-2xl w-full h-auto"
                 width={600}
