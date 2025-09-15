@@ -16,6 +16,7 @@ interface EditableTextProps {
   className?: string;
   placeholder?: string;
   as?: keyof JSX.IntrinsicElements;
+  isButtonChild?: boolean; // Nova prop para controle explícito
 }
 
 export function EditableText({ 
@@ -24,7 +25,8 @@ export function EditableText({
   type = 'text',
   className = '',
   placeholder = 'Digite o texto...',
-  as: Component = 'span'
+  as: Component = 'span',
+  isButtonChild = false
 }: EditableTextProps) {
   const { isAdmin } = useAuth();
   const { content } = useContent();
@@ -32,40 +34,25 @@ export function EditableText({
   
   const currentValue = content[contentKey] || fallback;
 
-  // Estados locais para gerenciar a edição
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(currentValue);
-  const [isInsideButton, setIsInsideButton] = useState(false);
   
-  const textRef = useRef<HTMLElement>(null);
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Sincroniza o valor caso o conteúdo seja recarregado
   useEffect(() => {
     setEditValue(content[contentKey] || fallback);
   }, [content, contentKey, fallback]);
 
-  // Lógica para detectar se o componente está dentro de um botão
   useEffect(() => {
-    if (textRef.current) {
-      if (textRef.current.closest('button')) {
-        setIsInsideButton(true);
-      }
-    }
-  }, []);
-
-  // Foca no input quando a edição local começa
-  useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
+    if (isEditing) {
+      inputRef.current?.focus();
+      textareaRef.current?.focus();
     }
   }, [isEditing]);
 
   const handleStartEdit = useCallback((e?: React.MouseEvent) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
+    if (e) { e.preventDefault(); e.stopPropagation(); }
     setIsEditing(true);
   }, []);
 
@@ -82,29 +69,20 @@ export function EditableText({
   }, [currentValue]);
 
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && type === 'text') {
-      e.preventDefault();
-      handleConfirmChange();
-    }
-    if (e.key === 'Escape') {
-      handleCancel();
-    }
+    if (e.key === 'Enter' && type === 'text') { e.preventDefault(); handleConfirmChange(); }
+    if (e.key === 'Escape') { handleCancel(); }
   }, [type, handleConfirmChange, handleCancel]);
 
-  // --- LÓGICA DE RENDERIZAÇÃO ---
-
-  // Se o modo de edição global NÃO está ativo, renderiza o texto simples
   if (!isEditMode || !isAdmin) {
     return <Component className={className}>{currentValue}</Component>;
   }
 
-  // Se a edição LOCAL está ativa (mostrando o input/textarea)
   if (isEditing) {
     const InputComponent = type === 'textarea' ? Textarea : Input;
     return (
       <div className="flex items-center gap-2 not-prose">
         <InputComponent
-          ref={inputRef}
+          ref={type === 'textarea' ? textareaRef : inputRef}
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -123,19 +101,15 @@ export function EditableText({
     );
   }
 
-  // Se o modo de edição global está ATIVO, mas a edição local NÃO
   return (
     <Component
-      ref={textRef as any}
       className={`relative group ${className}`}
-      // Se estiver dentro de um botão, o clique no texto inicia a edição
-      onClick={isInsideButton ? handleStartEdit : undefined} 
-      style={isInsideButton ? { cursor: 'pointer' } : {}}
-      title={isInsideButton ? 'Clique para editar' : ''}
+      onClick={isButtonChild && isEditMode ? handleStartEdit : undefined} 
+      style={isButtonChild && isEditMode ? { cursor: 'pointer' } : {}}
+      title={isButtonChild && isEditMode ? 'Clique para editar' : ''}
     >
       {currentValue}
-      {/* Só mostra o ícone flutuante se NÃO estiver dentro de um botão */}
-      {!isInsideButton && (
+      {!isButtonChild && (
         <Button 
           size="icon" 
           variant="ghost" 

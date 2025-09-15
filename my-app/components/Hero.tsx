@@ -1,130 +1,190 @@
+"use client";
+
+import { useState } from "react";
 import { Button } from "./ui/button";
-import { Play, ArrowRight } from "lucide-react";
-import { EditableImage } from "./EditableImage";
+import { Badge } from "./ui/badge";
+import { Play, ArrowRight, Star, Users, Award } from "lucide-react";
+import { ScheduleModal } from "./ScheduleModal";
 import { EditableText } from "./EditableText";
+import { EditableImage } from "./EditableImage";
+import { EditableSection } from "./EditableSection";
+import { useContent } from "@/contexts/ContentContext";
 
 export function Hero() {
+  const { content } = useContent();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // O 'heroImage' foi removido do useState, agora virá do useContent()
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-brand-light to-white py-20 lg:py-32">
-      <div className="container mx-auto max-w-6xl px-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Content */}
-          <div className="animate-fade-in-up">
-            <h1 className="text-hero text-brand-dark mb-6">
-              <EditableText
-                contentKey="hero.title"
-                fallback="Soluções contábeis automatizadas para sua empresa crescer"
-                as="span"
-              />
-            </h1>
+    <EditableSection 
+      id="hero-section" 
+      title="Seção Hero"
+      className="relative min-h-screen bg-gradient-to-br from-brand-light via-white to-brand-light/50 overflow-hidden"
+    >
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(46,175,154,0.1),transparent_50%)] pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(21,52,71,0.05),transparent_50%)] pointer-events-none"></div>
+      
+      <div className="relative pt-20 pb-16 sm:pt-32 sm:pb-24">
+        <div className="container mx-auto max-w-7xl px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
-            <p className="text-body text-gray-600 mb-8 max-w-lg">
-              <EditableText
-                contentKey="hero.description"
-                fallback="Automatize sua contabilidade com tecnologia de ponta. Mais tempo para focar no que realmente importa: o crescimento do seu negócio."
-                type="textarea"
-              />
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-brand-gradient hover:opacity-90 group"
-              >
-                <EditableText
-                  contentKey="hero.cta.primary"
-                  fallback="Agende uma demo"
-                  as="span"
+            {/* Left Column - Content */}
+            <div className="space-y-8">
+              {/* Badge */}
+              <div className="flex">
+                <Badge className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 px-4 py-2 hover:bg-brand-teal/20 transition-colors">
+                  <Star className="h-4 w-4 mr-2 fill-current" />
+                  <EditableText 
+                    contentKey="hero.badge"
+                    fallback="#1 em Automação Contábil"
+                    as="span"
+                  />
+                </Badge>
+              </div>
+
+              {/* Main Heading */}
+              <div className="space-y-4">
+                <h1 className="text-hero text-brand-dark leading-tight">
+                  <EditableText 
+                    contentKey="hero.title"
+                    fallback="Contabilidade Automatizada para o Futuro do seu Negócio"
+                    type="textarea"
+                    as="span"
+                  />
+                </h1>
+                
+                <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
+                  <EditableText 
+                    contentKey="hero.subtitle"
+                    fallback="Automatize sua contabilidade com tecnologia de ponta. Mais tempo para focar no que realmente importa: o crescimento do seu negócio."
+                    type="textarea"
+                  />
+                </p>
+              </div>
+
+              {/* Stats */}
+              <div className="flex flex-wrap gap-6">
+                <div className="flex items-center space-x-2">
+                  <Users className="h-5 w-5 text-brand-teal" />
+                  <div>
+                    <span className="font-semibold text-brand-dark">
+                      <EditableText contentKey="hero.stat1.number" fallback="500+" as="span" />
+                    </span>
+                    <span className="text-sm text-gray-600 ml-1">
+                      <EditableText contentKey="hero.stat1.label" fallback="Empresas atendidas" as="span" />
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-2">
+                  <Award className="h-5 w-5 text-brand-teal" />
+                  <div>
+                    <span className="font-semibold text-brand-dark">
+                      <EditableText contentKey="hero.stat2.number" fallback="98%" as="span" />
+                    </span>
+                    <span className="text-sm text-gray-600 ml-1">
+                      <EditableText contentKey="hero.stat2.label" fallback="Satisfação" as="span" />
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  size="lg"
+                  className="bg-brand-gradient hover:opacity-90 shadow-lg hover:shadow-xl transition-all duration-300 group"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <EditableText 
+                    contentKey="hero.cta.primary"
+                    fallback="Começar Agora"
+                    isButtonChild={true}
+                    as="span"
+                  />
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+                
+                <Button 
+                  variant="outline" 
+                  size="lg"
+                  className="border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white transition-all duration-300 group"
+                >
+                  <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
+                  <EditableText 
+                    contentKey="hero.cta.secondary"
+                    fallback="Ver Demonstração"
+                    isButtonChild={true}
+                    as="span"
+                  />
+                </Button>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="pt-8 border-t border-gray-200">
+                <p className="text-sm text-gray-600 mb-4">
+                  <EditableText 
+                    contentKey="hero.trust.title"
+                    fallback="Confiado por empresas de todos os portes"
+                  />
+                </p>
+                <div className="flex items-center space-x-6 opacity-60">
+                  <span className="font-semibold text-gray-400">
+                    <EditableText contentKey="hero.trust.partner1" fallback="Microsoft" as="span" />
+                  </span>
+                  <span className="font-semibold text-gray-400">
+                    <EditableText contentKey="hero.trust.partner2" fallback="Google" as="span" />
+                  </span>
+                  <span className="font-semibold text-gray-400">
+                    <EditableText contentKey="hero.trust.partner3" fallback="Amazon" as="span" />
+                  </span>
+                  <span className="font-semibold text-gray-400">
+                    <EditableText contentKey="hero.trust.partner4" fallback="Apple" as="span" />
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Image */}
+            <div className="relative lg:pl-8">
+              <div className="relative">
+                <EditableImage
+                  contentKey="hero.image"
+                  fallback="/img/hero-image.png"
+                  alt="Contabilidade Digital"
+                  width={1000}
+                  height={800} // Ajuste a altura conforme a proporção da imagem
+                  priority
+                  className="rounded-2xl shadow-2xl w-full h-auto"
                 />
-                <Play className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white group"
-              >
-                <EditableText
-                  contentKey="hero.cta.secondary"
-                  fallback="Ver planos"
-                  as="span"
-                />
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
-            
-            {/* Stats */}
-            <div className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-gray-200">
-              <div>
-                <div className="text-2xl font-semibold text-brand-teal">
-                  <EditableText
-                    contentKey="hero.stats.companies.number"
-                    fallback="500+"
-                    as="span"
-                  />
-                </div>
-                <div className="text-sm text-gray-600">
-                  <EditableText
-                    contentKey="hero.stats.companies.label"
-                    fallback="Empresas atendidas"
-                    as="span"
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="text-2xl font-semibold text-brand-teal">
-                  <EditableText
-                    contentKey="hero.stats.satisfaction.number"
-                    fallback="98%"
-                    as="span"
-                  />
-                </div>
-                <div className="text-sm text-gray-600">
-                  <EditableText
-                    contentKey="hero.stats.satisfaction.label"
-                    fallback="Satisfação"
-                    as="span"
-                  />
-                </div>
-              </div>
-              <div>
-                <div className="text-2xl font-semibold text-brand-teal">
-                  <EditableText
-                    contentKey="hero.stats.support.number"
-                    fallback="24h"
-                    as="span"
-                  />
-                </div>
-                <div className="text-sm text-gray-600">
-                  <EditableText
-                    contentKey="hero.stats.support.label"
-                    fallback="Suporte"
-                    as="span"
-                  />
+                
+                <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-xl border border-gray-100 max-w-xs">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-12 h-12 bg-brand-gradient rounded-full flex items-center justify-center">
+                      <Award className="h-6 w-6 text-white" />
+                    </div>
+                    <div>
+                      <p className="font-semibold text-brand-dark">
+                        <EditableText contentKey="hero.card.title" fallback="Certificação Digital" />
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        <EditableText contentKey="hero.card.subtitle" fallback="Segurança e conformidade garantidas" />
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          
-          {/* Image */}
-          <div className="relative">
-            <div className="relative z-10">
-              <EditableImage
-                contentKey="hero.image"
-                fallback="/img/hero-image.png"
-                alt="Equipe ContabilizeTech trabalhando com tecnologia"
-                className="rounded-2xl shadow-2xl w-full h-auto"
-                width={600}
-                height={400}
-              />
-            </div>
-            
-            {/* Background decoration */}
-            <div className="absolute -top-4 -right-4 w-72 h-72 bg-brand-gradient opacity-10 rounded-full blur-3xl"></div>
-            <div className="absolute -bottom-8 -left-8 w-64 h-64 bg-brand-accent opacity-10 rounded-full blur-3xl"></div>
           </div>
         </div>
       </div>
-    </section>
+
+      <ScheduleModal 
+      open={isModalOpen} 
+      onOpenChange={setIsModalOpen} 
+      />
+    </EditableSection>
   );
 }

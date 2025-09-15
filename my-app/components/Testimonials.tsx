@@ -1,77 +1,88 @@
 import { Card, CardContent } from "./ui/card";
 import { Star } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-
-const testimonials = [
-  {
-    name: "Maria Silva",
-    role: "CEO, TechStart",
-    image: "https://images.unsplash.com/photo-1689600944138-da3b150d9cb8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYXBweSUyMHByb2Zlc3Npb25hbCUyMGJ1c2luZXNzd29tYW58ZW58MXx8fHwxNzU3MDE0NTU1fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    rating: 5,
-    content: "A ContabilizeTech transformou nossa gestão financeira. A automação nos permitiu focar no crescimento do negócio, enquanto eles cuidam de toda parte contábil com excelência."
-  },
-  {
-    name: "João Santos",
-    role: "Diretor Financeiro, Commerce Plus",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYXBweSUyMHByb2Zlc3Npb25hbCUyMGJ1c2luZXNzd29tYW58ZW58MXx8fHwxNzU3MDE0NjI4fDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    rating: 5,
-    content: "Relatórios em tempo real e automação completa. Nossa empresa cresceu 40% no último ano e a ContabilizeTech foi fundamental nessa jornada."
-  },
-  {
-    name: "Ana Costa",
-    role: "Sócia, Consultoria Estratégica",
-    image: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxoYXBweSUyMHByb2Zlc3Npb25hbCUyMGJ1c2luZXNzd29tYW58ZW58MXx8fHwxNzU3MDE0NjMwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
-    rating: 5,
-    content: "Migrar para a ContabilizeTech foi a melhor decisão. Suporte 24/7, tecnologia avançada e equipe sempre disponível. Recomendo para todas as empresas."
-  }
-];
+import { EditableImage } from "./EditableImage";
+import { EditableText } from "./EditableText";
+import { useContent } from "@/contexts/ContentContext";
 
 export function Testimonials() {
+  const { content } = useContent();
+
+  // 1. Criamos a estrutura de dados dinamicamente a partir do ContentContext
+  const testimonialsData = [
+    {
+      nameKey: "testimonials.item1.name",
+      roleKey: "testimonials.item1.role",
+      imageKey: "testimonials.item1.image",
+      contentKey: "testimonials.item1.content",
+      fallback: {
+        name: "Maria Silva",
+        role: "CEO, TechStart",
+        image: "/img/testimonial-2.png", // Imagem de fallback local
+        content: "A ContabilizeTech transformou nossa gestão financeira. A automação nos permitiu focar no crescimento do negócio, enquanto eles cuidam de toda parte contábil com excelência."
+      }
+    },
+    {
+      nameKey: "testimonials.item2.name",
+      roleKey: "testimonials.item2.role",
+      imageKey: "testimonials.item2.image",
+      contentKey: "testimonials.item2.content",
+      fallback: {
+        name: "João Santos",
+        role: "Diretor Financeiro, Commerce Plus",
+        image: "/img/testimonial-1.png",
+        content: "Relatórios em tempo real e automação completa. Nossa empresa cresceu 40% no último ano e a ContabilizeTech foi fundamental nessa jornada."
+      }
+    },
+    {
+      nameKey: "testimonials.item3.name",
+      roleKey: "testimonials.item3.role",
+      imageKey: "testimonials.item3.image",
+      contentKey: "testimonials.item3.content",
+      fallback: {
+        name: "Ana Costa",
+        role: "Sócia, Consultoria Estratégica",
+        image: "/img/testimonial-3.png",
+        content: "Migrar para a ContabilizeTech foi a melhor decisão. Suporte 24/7, tecnologia avançada e equipe sempre disponível. Recomendo para todas as empresas."
+      }
+    }
+  ];
+
   return (
     <section className="py-20 bg-white">
       <div className="container mx-auto max-w-6xl px-6">
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-h2 text-brand-dark mb-4">
-            O que nossos{" "}
-            <span className="text-brand-gradient">clientes</span>{" "}
-            dizem
+            {/* 2. Título e descrição agora são editáveis */}
+            <EditableText contentKey="testimonials.title" fallback="O que nossos clientes dizem" as="span" />
           </h2>
           <p className="text-body text-gray-600 max-w-2xl mx-auto">
-            Empresas de todos os tamanhos confiam na ContabilizeTech para 
-            automatizar sua gestão contábil e impulsionar seus resultados.
+            <EditableText contentKey="testimonials.description" fallback="Empresas de todos os tamanhos confiam na ContabilizeTech para automatizar sua gestão contábil e impulsionar seus resultados." type="textarea" />
           </p>
         </div>
 
         {/* Testimonials Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card 
-              key={index} 
-              className="border-0 shadow-lg hover-lift bg-white group"
-            >
-              <CardContent className="p-8">
-                {/* Rating */}
+          {testimonialsData.map((testimonial, index) => (
+            <Card key={index} className="border-0 shadow-lg hover-lift bg-white group">
+              <CardContent className="p-8 flex flex-col h-full">
                 <div className="flex items-center mb-6">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className="h-5 w-5 text-yellow-400 fill-current" 
-                    />
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
                   ))}
                 </div>
                 
-                {/* Content */}
-                <p className="text-gray-700 mb-6 leading-relaxed">
-                  "{testimonial.content}"
+                <p className="text-gray-700 mb-6 leading-relaxed flex-grow">
+                  <EditableText contentKey={testimonial.contentKey} fallback={testimonial.fallback.content} type="textarea" />
                 </p>
                 
-                {/* Author */}
-                <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                    <ImageWithFallback
-                      src={testimonial.image}
-                      alt={testimonial.name}
+                <div className="flex items-center mt-auto">
+                  <div className="w-12 h-12 rounded-full overflow-hidden mr-4 flex-shrink-0">
+                    {/* 3. Imagem do autor agora é editável */}
+                    <EditableImage
+                      contentKey={testimonial.imageKey}
+                      fallback={testimonial.fallback.image}
+                      alt={content[testimonial.nameKey] || testimonial.fallback.name}
                       width={48}
                       height={48}
                       className="w-full h-full object-cover"
@@ -79,10 +90,10 @@ export function Testimonials() {
                   </div>
                   <div>
                     <div className="font-semibold text-brand-dark">
-                      {testimonial.name}
+                      <EditableText contentKey={testimonial.nameKey} fallback={testimonial.fallback.name} as="span" />
                     </div>
                     <div className="text-sm text-gray-600">
-                      {testimonial.role}
+                      <EditableText contentKey={testimonial.roleKey} fallback={testimonial.fallback.role} as="span" />
                     </div>
                   </div>
                 </div>
@@ -95,16 +106,28 @@ export function Testimonials() {
         <div className="mt-16 text-center">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <div className="text-3xl font-bold text-brand-teal mb-2">98%</div>
-              <div className="text-gray-600">Taxa de satisfação</div>
+              <div className="text-3xl font-bold text-brand-teal mb-2">
+                <EditableText contentKey="testimonials.stat1.value" fallback="98%" as="span" />
+              </div>
+              <div className="text-gray-600">
+                <EditableText contentKey="testimonials.stat1.label" fallback="Taxa de satisfação" as="span" />
+              </div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-brand-teal mb-2">500+</div>
-              <div className="text-gray-600">Empresas atendidas</div>
+              <div className="text-3xl font-bold text-brand-teal mb-2">
+                <EditableText contentKey="testimonials.stat2.value" fallback="500+" as="span" />
+              </div>
+              <div className="text-gray-600">
+                <EditableText contentKey="testimonials.stat2.label" fallback="Empresas atendidas" as="span" />
+              </div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-brand-teal mb-2">24/7</div>
-              <div className="text-gray-600">Suporte disponível</div>
+              <div className="text-3xl font-bold text-brand-teal mb-2">
+                <EditableText contentKey="testimonials.stat3.value" fallback="24/7" as="span" />
+              </div>
+              <div className="text-gray-600">
+                <EditableText contentKey="testimonials.stat3.label" fallback="Suporte disponível" as="span" />
+              </div>
             </div>
           </div>
         </div>

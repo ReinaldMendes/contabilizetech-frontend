@@ -7,7 +7,7 @@ import connectDB from './src/config/db.js'; // MUDOU: de require para import e a
 import authRoutes from './src/routes/auth.js'; // MUDOU: Importando a rota para uma variável
 import contentRoutes from './src/routes/content.js';
 import userRoutes from './src/routes/userRoutes.js';
-
+import partnerRoutes from './src/routes/partnerRoutes.js';
 const app = express();
 
 connectDB();
@@ -23,6 +23,6 @@ app.use('/api/auth', authRoutes); // CORRIGIDO: Usando a variável importada
 
  app.use('/api/content', contentRoutes);
 app.use('/api/users', userRoutes);
-
+app.use('/api/partners', partnerRoutes);
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

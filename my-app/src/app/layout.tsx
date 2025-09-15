@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ContentProvider } from '@/contexts/ContentContext';
 import { EditProvider } from '@/contexts/EditContext';
+import { FloatingWhatsApp } from '@/components/FloatingWhatsApp'; // 1. Importe o componente
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -37,7 +38,7 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: {
-  children: React.Node;
+  children: React.ReactNode;
 }) {
   return (
     <html lang="pt-BR">
@@ -46,6 +47,7 @@ export default function RootLayout({
           <ContentProvider>
             <EditProvider>
               {children}
+              <FloatingWhatsApp /> {/* 2. Adicione o componente aqui */}
             </EditProvider>
           </ContentProvider>
         </AuthProvider>

@@ -4,22 +4,54 @@ import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { ScheduleModal } from "./ScheduleModal";
-import Image from 'next/image'; // 1. Import do componente Image do Next.js
-import Link from 'next/link';   // 2. Import do componente Link do Next.js
+import Link from 'next/link';
+import { useContent } from "@/contexts/ContentContext";
+import { EditableText } from "./EditableText";
+import { EditableImage } from "./EditableImage";
 
 export function Header() {
+  const { content } = useContent();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
+
+  // Estrutura de dados para os links do menu, buscando do ContentContext
+  const navLinks = [
+    { 
+      textKey: 'header.menu.item1.text', 
+      href: content['header.menu.item1.href'] || '#services',
+      fallback: 'Serviços'
+    },
+    { 
+      textKey: 'header.menu.item2.text', 
+      href: content['header.menu.item2.href'] || '#quem-somos',
+      fallback: 'Quem Somos'
+    },
+    { 
+      textKey: 'header.menu.item3.text', 
+      href: content['header.menu.item3.href'] || '#contact',
+      fallback: 'Contato'
+    },
+  ];
+
+  // Função para lidar com o scroll suave e fechar o menu mobile
+  const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      const targetId = href.substring(1);
+      document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth' });
+    }
+    setIsMenuOpen(false); // Fecha o menu mobile após o clique
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container mx-auto max-w-6xl px-6">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <div className="flex items-center space-x-3">
-            {/* 1. Uso do componente Image otimizado */}
-            <Image 
-              src="/img/contabilizetech_logo.png" // Assumindo que a imagem está em public/images/
+          <Link href="/" className="flex items-center space-x-3" aria-label="Página Inicial">
+            <EditableImage
+              contentKey="header.logo"
+              fallback="/img/contabilizetech_logo.png"
               alt="ContabilizeTech Logo"
               width={40}
               height={40}
@@ -28,45 +60,24 @@ export function Header() {
             <span className="text-xl font-semibold text-brand-dark">
               Contabilize<span className="text-brand-teal">Tech</span>
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a 
-              href="#services" 
-              className="text-sm font-medium text-gray-700 hover:text-brand-teal transition-colors cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Serviços
-            </a>
-            <a 
-              href="#quem-somos" 
-              className="text-sm font-medium text-gray-700 hover:text-brand-teal transition-colors cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('quem-somos')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Quem Somos
-            </a>
-            <a 
-              href="#contact" 
-              className="text-sm font-medium text-gray-700 hover:text-brand-teal transition-colors cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              Contato
-            </a>
+            {navLinks.map((link) => (
+              <a 
+                key={link.textKey}
+                href={link.href} 
+                className="text-sm font-medium text-gray-700 hover:text-brand-teal transition-colors cursor-pointer"
+                onClick={(e) => handleSmoothScroll(e, link.href)}
+              >
+                <EditableText contentKey={link.textKey} fallback={link.fallback} as="span" />
+              </a>
+            ))}
           </nav>
 
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* 2. Uso do Link do Next.js com a prop 'href' */}
             <Link href="/admin/login">
               <Button 
                 variant="ghost" 
@@ -81,7 +92,12 @@ export function Header() {
               className="bg-brand-gradient hover:shadow-lg hover:scale-105 transition-all duration-300"
               onClick={() => setIsScheduleModalOpen(true)}
             >
-              Agende uma demo
+              <EditableText 
+                contentKey="header.cta.demo" 
+                fallback="Agende uma demo" 
+                as="span" 
+                isButtonChild={true}
+              />
             </Button>
           </div>
 
@@ -103,9 +119,16 @@ export function Header() {
         {isMenuOpen && (
           <div className="md:hidden border-t bg-white">
             <nav className="flex flex-col space-y-4 p-6">
-              <a href="#services" /* ... */ >Serviços</a>
-              <a href="#quem-somos" /* ... */ >Quem Somos</a>
-              <a href="#contact" /* ... */ >Contato</a>
+              {navLinks.map((link) => (
+                <a 
+                  key={link.textKey}
+                  href={link.href} 
+                  className="text-sm font-medium text-gray-700 hover:text-brand-teal transition-colors cursor-pointer"
+                  onClick={(e) => handleSmoothScroll(e, link.href)}
+                >
+                  <EditableText contentKey={link.textKey} fallback={link.fallback} as="span" />
+                </a>
+              ))}
               <div className="flex flex-col space-y-2 pt-4 border-t">
                 <Link href="/admin/login">
                   <Button 
@@ -120,7 +143,10 @@ export function Header() {
                 <Button 
                   size="sm" 
                   className="bg-brand-gradient hover:shadow-lg transition-all duration-300"
-                  onClick={() => setIsScheduleModalOpen(true)}
+                  onClick={() => {
+                    setIsScheduleModalOpen(true);
+                    setIsMenuOpen(false);
+                  }}
                 >
                   Agende uma demo
                 </Button>

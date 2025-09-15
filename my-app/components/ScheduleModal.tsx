@@ -1,5 +1,7 @@
+"use client";
+
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -27,10 +29,9 @@ export function ScheduleModal({ open, onOpenChange }: ScheduleModalProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
+    // A lógica de envio será adicionada aqui no futuro
     console.log("Form submitted:", formData);
     onOpenChange(false);
-    // Show success message
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -44,10 +45,10 @@ export function ScheduleModal({ open, onOpenChange }: ScheduleModalProps) {
           <DialogTitle className="text-2xl text-brand-dark mb-2">
             Agende sua demonstração
           </DialogTitle>
-          <p className="text-gray-600">
+          <DialogDescription className="text-gray-600">
             Preencha os dados abaixo e nossa equipe entrará em contato para agendar 
             uma demonstração personalizada da nossa plataforma.
-          </p>
+          </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-6 mt-6">

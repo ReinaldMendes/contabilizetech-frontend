@@ -1,5 +1,8 @@
+"use client"; // Footer usa hooks do ContentContext, então precisa ser cliente
+
 import { Separator } from "./ui/separator";
 import { EditableText } from "./EditableText";
+import { EditableImage } from "./EditableImage";
 import { 
   Mail, 
   Phone, 
@@ -7,9 +10,25 @@ import {
   Linkedin, 
   Instagram
 } from "lucide-react";
-import Image from 'next/image';
+import { useContent } from "@/contexts/ContentContext";
+import Link from 'next/link';
 
 export function Footer() {
+  const { content } = useContent();
+
+  // Estrutura de dados para os links do rodapé para facilitar a renderização
+  const serviceLinks = [
+    { key: "footer.services.item1", fallback: "Contabilidade Digital", hrefKey: "footer.services.item1.href" },
+    { key: "footer.services.item2", fallback: "Obrigações Fiscais", hrefKey: "footer.services.item2.href" },
+    { key: "footer.services.item3", fallback: "Gestão Financeira", hrefKey: "footer.services.item3.href" },
+  ];
+
+  const companyLinks = [
+    { key: "footer.company.item1", fallback: "Sobre nós", hrefKey: "footer.company.item1.href" },
+    { key: "footer.company.item2", fallback: "Nossa equipe", hrefKey: "footer.company.item2.href" },
+    { key: "footer.company.item3", fallback: "Carreira", hrefKey: "footer.company.item3.href" },
+  ];
+  
   return (
     <footer id="contact" className="bg-brand-dark text-white">
       <div className="container mx-auto max-w-6xl px-6">
@@ -19,93 +38,61 @@ export function Footer() {
             {/* Company Info */}
             <div className="lg:col-span-2">
               <div className="flex items-center space-x-3 mb-6">
-                <Image 
-                  src="/img/contabilizetech_logo.png" 
-                  alt="ContabilizeTech" 
+                <EditableImage
+                  contentKey="footer.logo"
+                  fallback="/img/contabilizetech_logo.png"
+                  alt="ContabilizeTech Logo"
                   width={40}
                   height={40}
+                  priority
                   className="h-10 w-10 filter brightness-0 invert"
                 />
                 <span className="text-xl font-semibold text-white">
                   Contabilize<span className="text-brand-teal">Tech</span>
                 </span>
               </div>
-              
               <p className="text-gray-300 mb-6 leading-relaxed max-w-md">
-                <EditableText
-                  contentKey="footer.description"
-                  fallback="Transformamos a gestão contábil das empresas com tecnologia de ponta e expertise especializada. Sua empresa mais eficiente, nossa missão."
-                  type="textarea"
-                />
+                <EditableText contentKey="footer.description" fallback="..." type="textarea" />
               </p>
-              
               <div className="space-y-3">
-                <div className="flex items-center space-x-3">
+                <a href={`mailto:${content['footer.contact.email']}`} className="flex items-center space-x-3 text-gray-300 hover:text-brand-teal">
                   <Mail className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">
-                    <EditableText
-                      contentKey="footer.contact.email"
-                      fallback="comercial@contabilizetech.com.br"
-                      as="span"
-                    />
-                  </span>
-                </div>
-                <div className="flex items-center space-x-3">
+                  <span><EditableText contentKey="footer.contact.email" fallback="..." as="span" /></span>
+                </a>
+                <a href={`tel:${(content['footer.contact.phone'] || '').replace(/\D/g, '')}`} className="flex items-center space-x-3 text-gray-300 hover:text-brand-teal">
                   <Phone className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">
-                    <EditableText
-                      contentKey="footer.contact.phone"
-                      fallback="(42) 99820-2183"
-                      as="span"
-                    />
-                  </span>
-                </div>
+                  <span><EditableText contentKey="footer.contact.phone" fallback="..." as="span" /></span>
+                </a>
                 <div className="flex items-center space-x-3">
                   <MapPin className="h-5 w-5 text-brand-teal" />
-                  <span className="text-gray-300">
-                    <EditableText
-                      contentKey="footer.contact.address"
-                      fallback="Rua Riachuelo, 129, sala 1"
-                      as="span"
-                    />
-                  </span>
+                  <span className="text-gray-300"><EditableText contentKey="footer.contact.address" fallback="..." as="span" /></span>
                 </div>
               </div>
             </div>
             
-            {/* Services */}
+            {/* Services & Company Links */}
             <div>
-              <h3 className="font-semibold mb-6">
-                <EditableText
-                  contentKey="footer.services.title"
-                  fallback="Serviços"
-                  as="span"
-                />
-              </h3>
+              <h3 className="font-semibold mb-6"><EditableText contentKey="footer.services.title" fallback="Serviços" as="span" /></h3>
               <ul className="space-y-3 text-gray-300">
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item1" fallback="Contabilidade Digital" as="span" /></a></li>
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item2" fallback="Obrigações Fiscais" as="span" /></a></li>
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item3" fallback="Gestão Financeira" as="span" /></a></li>
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item4" fallback="Consultoria Empresarial" as="span" /></a></li>
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.services.item5" fallback="Relatórios Gerenciais" as="span" /></a></li>
+                {serviceLinks.map(link => (
+                  <li key={link.key}>
+                    <Link href={content[link.hrefKey] || '#'} className="hover:text-brand-teal transition-colors">
+                      <EditableText contentKey={link.key} fallback={link.fallback} as="span" />
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
-            
-            {/* Company */}
             <div>
-              <h3 className="font-semibold mb-6">
-                <EditableText
-                  contentKey="footer.company.title"
-                  fallback="Empresa"
-                  as="span"
-                />
-              </h3>
+              <h3 className="font-semibold mb-6"><EditableText contentKey="footer.company.title" fallback="Empresa" as="span" /></h3>
               <ul className="space-y-3 text-gray-300">
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item1" fallback="Sobre nós" as="span" /></a></li>
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item2" fallback="Nossa equipe" as="span" /></a></li>
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item3" fallback="Carreira" as="span" /></a></li>
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item4" fallback="Blog" as="span" /></a></li>
-                <li><a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.company.item5" fallback="Imprensa" as="span" /></a></li>
+                {companyLinks.map(link => (
+                  <li key={link.key}>
+                    <Link href={content[link.hrefKey] || '#'} className="hover:text-brand-teal transition-colors">
+                      <EditableText contentKey={link.key} fallback={link.fallback} as="span" />
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
@@ -116,40 +103,18 @@ export function Footer() {
         {/* Bottom Footer */}
         <div className="py-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            {/* Legal Links */}
-            <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400">
-              <a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.legal.privacy" fallback="Política de Privacidade" as="span" /></a>
-              <a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.legal.terms" fallback="Termos de Uso" as="span" /></a>
-              <a href="#" className="hover:text-brand-teal transition-colors"><EditableText contentKey="footer.legal.lgpd" fallback="LGPD" as="span" /></a>
+            <div className="text-sm text-gray-400">
+               <EditableText contentKey="footer.copyright" fallback="© 2024 ContabilizeTech. Todos os direitos reservados." as="p" />
             </div>
-            
-            {/* Social Links */}
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-400 mr-2">
-                <EditableText
-                  contentKey="footer.social.handle"
-                  fallback="@contabilizetech"
-                  as="span"
-                />
-              </span>
-              <a href="#" className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors" aria-label="LinkedIn">
+              <span className="text-sm text-gray-400 mr-2"><EditableText contentKey="footer.social.handle" fallback="@contabilizetech" as="span" /></span>
+              <Link href={content['footer.social.linkedin.url'] || '#'} target="_blank" className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5" />
-              </a>
-              <a href="#" className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors" aria-label="Instagram">
+              </Link>
+              <Link href={content['footer.social.instagram.url'] || '#'} target="_blank" className="p-2 rounded-lg bg-gray-800 hover:bg-brand-teal transition-colors" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
-              </a>
+              </Link>
             </div>
-          </div>
-          
-          {/* Copyright */}
-          <div className="mt-8 pt-8 border-t border-gray-700 text-center text-sm text-gray-400">
-            <p>
-              <EditableText
-                contentKey="footer.copyright"
-                fallback="© 2024 ContabilizeTech. Todos os direitos reservados. CNPJ: 00.000.000/0001-00"
-                as="span"
-              />
-            </p>
           </div>
         </div>
       </div>

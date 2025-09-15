@@ -19,6 +19,7 @@ interface EditableImageProps {
   width: number;
   height: number;
   className?: string;
+  priority?: boolean; // <-- ADICIONE ESTA LINHA
 }
 
 export function EditableImage({ 
