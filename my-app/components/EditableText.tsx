@@ -16,7 +16,7 @@ interface EditableTextProps {
   className?: string;
   placeholder?: string;
   as?: keyof JSX.IntrinsicElements;
-  isButtonChild?: boolean; // Nova prop para controle explícito
+  isButtonChild?: boolean;
 }
 
 export function EditableText({ 
@@ -37,6 +37,7 @@ export function EditableText({
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(currentValue);
   
+  const textRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -78,19 +79,45 @@ export function EditableText({
   }
 
   if (isEditing) {
-    const InputComponent = type === 'textarea' ? Textarea : Input;
-    return (
-      <div className="flex items-center gap-2 not-prose">
-        <InputComponent
-          ref={type === 'textarea' ? textareaRef : inputRef}
+    // A lógica de renderização foi separada para ajudar o TypeScript
+    if (isButtonChild) {
+      return (
+        <Input
+          ref={inputRef}
           value={editValue}
           onChange={(e) => setEditValue(e.target.value)}
           onKeyDown={handleKeyDown}
           onBlur={handleConfirmChange}
           placeholder={placeholder}
-          className="border-2 border-brand-teal bg-white text-black"
-          rows={type === 'textarea' ? 4 : undefined}
+          className="border-2 border-brand-teal bg-white text-black h-full"
+          onClick={(e) => e.stopPropagation()}
         />
+      );
+    }
+    return (
+      <div className="flex items-center gap-2 not-prose">
+        {type === 'textarea' ? (
+          <Textarea
+            ref={textareaRef}
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={handleConfirmChange}
+            placeholder={placeholder}
+            className="border-2 border-brand-teal bg-white text-black"
+            rows={4}
+          />
+        ) : (
+          <Input
+            ref={inputRef}
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+            onKeyDown={handleKeyDown}
+            onBlur={handleConfirmChange}
+            placeholder={placeholder}
+            className="border-2 border-brand-teal bg-white text-black"
+          />
+        )}
         <Button size="icon" onClick={handleConfirmChange} className="bg-green-600 hover:bg-green-700 h-8 w-8 flex-shrink-0">
           <Check className="h-4 w-4" />
         </Button>
@@ -100,22 +127,22 @@ export function EditableText({
       </div>
     );
   }
+  
+  const componentProps: any = {
+    ref: textRef,
+    className: `relative group ${className}`,
+  };
+  if (isButtonChild && isEditMode) {
+    componentProps.onClick = handleStartEdit;
+    componentProps.style = { cursor: 'pointer' };
+    componentProps.title = 'Clique para editar';
+  }
 
   return (
-    <Component
-      className={`relative group ${className}`}
-      onClick={isButtonChild && isEditMode ? handleStartEdit : undefined} 
-      style={isButtonChild && isEditMode ? { cursor: 'pointer' } : {}}
-      title={isButtonChild && isEditMode ? 'Clique para editar' : ''}
-    >
+    <Component {...componentProps}>
       {currentValue}
       {!isButtonChild && (
-        <Button 
-          size="icon" 
-          variant="ghost" 
-          onClick={handleStartEdit}
-          className="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-brand-teal opacity-0 group-hover:opacity-100 transition-opacity"
-        >
+        <Button size="icon" variant="ghost" onClick={handleStartEdit} className="absolute -top-2 -right-2 h-7 w-7 rounded-full bg-brand-teal opacity-0 group-hover:opacity-100 transition-opacity">
           <Edit3 className="h-4 w-4 text-white" />
         </Button>
       )}
