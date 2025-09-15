@@ -104,8 +104,12 @@ export function FAQ() {
               value={`item-${index}`}
               className="bg-white rounded-lg shadow-sm border border-gray-200 px-6"
             >
-              <AccordionTrigger className="text-left font-medium text-brand-dark hover:text-brand-teal transition-colors">
-                <EditableText contentKey={faq.questionKey} fallback={faq.fallback.question} />
+              <AccordionTrigger className="text-left font-medium ...">
+                  <EditableText 
+                    contentKey={faq.questionKey} 
+                    fallback={faq.fallback.question}
+                    isButtonChild={true} // <-- ADICIONE ESTA PROP
+                  />
               </AccordionTrigger>
               <AccordionContent className="text-gray-700 leading-relaxed">
                 <EditableText contentKey={faq.answerKey} fallback={faq.fallback.answer} type="textarea" />
