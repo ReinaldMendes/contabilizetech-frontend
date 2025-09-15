@@ -4,23 +4,22 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
   images: {
-    // A chave 'formats' está ok e pode ser mantida
     formats: ['image/webp', 'image/avif'],
-    // Trocamos 'domains' por 'remotePatterns'
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com', // Mantivemos o domínio que você já tinha
+        hostname: 'images.unsplash.com',
       },
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com', // ADICIONAMOS O DOMÍNIO DO CLOUDINARY AQUI
+        hostname: 'res.cloudinary.com',
       },
     ],
   },
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
+  // O bloco 'eslint' foi removido
 };
 
-export default nextConfig; // Usamos export default com o .mjs
+export default nextConfig;
