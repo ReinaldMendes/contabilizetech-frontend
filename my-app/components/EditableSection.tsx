@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, ReactNode } from 'react';
 import { Settings, Edit3, Move, Eye, EyeOff } from 'lucide-react';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
@@ -11,18 +11,18 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from './ui/dropdown-menu';
-const { isEditMode } = useEdit();
-import { useAuth } from '../src/contexts/AuthContext';
+import { useEdit } from '@/contexts/EditContext'; // 1. Imports corrigidos e organizados
+import { useAuth } from '@/contexts/AuthContext';
 
 interface EditableSectionProps {
-  children: React.ReactNode;
+  children: ReactNode;
   id: string;
   title: string;
   className?: string;
-  onEdit?: () => void;
-  onMove?: (direction: 'up' | 'down') => void;
-  onToggleVisibility?: () => void;
-  isVisible?: boolean;
+  // Funções para o futuro (quando o backend suportar)
+  // onMove?: (direction: 'up' | 'down') => void;
+  // onToggleVisibility?: () => void;
+  // isVisible?: boolean;
 }
 
 export function EditableSection({ 
@@ -30,131 +30,78 @@ export function EditableSection({
   id, 
   title, 
   className = '', 
-  onEdit,
-  onMove,
-  onToggleVisibility,
-  isVisible = true
 }: EditableSectionProps) {
-  const { isAuthenticated } = useAuth();
-  const { isEditMode, setHasUnsavedChanges } = useEdit();
+  // 2. Hooks chamados dentro do componente
+  const { isAdmin } = useAuth();
+  const { isEditMode } = useEdit();
   
   const [isHovered, setIsHovered] = useState(false);
 
-  const showControls = isAuthenticated && isEditMode && isHovered;
+  // Apenas mostra os controles se o usuário for admin e o modo de edição estiver ativo
+  const canShowControls = isAdmin && isEditMode;
+  const showControlsOnHover = canShowControls && isHovered;
 
-  const handleEdit = () => {
-    if (onEdit) {
-      onEdit();
-    }
-    setHasUnsavedChanges(true);
-  };
-
+  // Funções para funcionalidades futuras
   const handleMove = (direction: 'up' | 'down') => {
-    if (onMove) {
-      onMove(direction);
-    }
-    setHasUnsavedChanges(true);
+    alert(`Funcionalidade "Mover Seção ${direction}" a ser implementada.`);
   };
-
+  
   const handleToggleVisibility = () => {
-    if (onToggleVisibility) {
-      onToggleVisibility();
-    }
-    setHasUnsavedChanges(true);
+    alert('Funcionalidade "Mostrar/Ocultar Seção" a ser implementada.');
   };
 
   return (
+    // 3. Lógica de hover e visibilidade simplificada
     <div
-      className={`relative ${className} ${!isVisible ? 'opacity-50' : ''}`}
+      className={`relative ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {/* Section Controls */}
-      {showControls && (
-        <div className="absolute top-4 right-4 z-10 flex items-center space-x-2">
-          {/* Section Title Badge */}
-          <Badge variant="secondary" className="bg-brand-dark text-white">
+      {/* Controles de Edição da Seção */}
+      {canShowControls && (
+        <div 
+          className={`absolute top-4 right-4 z-20 flex items-center space-x-2 transition-opacity duration-300 ${
+            showControlsOnHover ? 'opacity-100' : 'opacity-0'
+          }`}
+        >
+          <Badge variant="secondary" className="bg-brand-dark text-white shadow-md">
             {title}
           </Badge>
 
-          {/* Visibility Toggle */}
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleToggleVisibility}
-            className="h-8 w-8 p-0 bg-white shadow-lg"
-            title={isVisible ? "Ocultar seção" : "Mostrar seção"}
-          >
-            {isVisible ? (
-              <Eye className="h-4 w-4" />
-            ) : (
-              <EyeOff className="h-4 w-4" />
-            )}
-          </Button>
-
-          {/* Section Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                size="sm"
-                className="h-8 w-8 p-0 bg-brand-teal hover:bg-brand-dark-blue shadow-lg"
-              >
+              <Button size="sm" className="h-8 w-8 p-0 bg-brand-teal hover:bg-brand-dark-blue shadow-lg">
                 <Settings className="h-4 w-4 text-white" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuItem onClick={handleEdit}>
+              <DropdownMenuItem onClick={() => alert('Abrir modal de edição de conteúdo da seção')}>
                 <Edit3 className="h-4 w-4 mr-2" />
                 Editar Conteúdo
               </DropdownMenuItem>
-              
               <DropdownMenuSeparator />
-              
               <DropdownMenuItem onClick={() => handleMove('up')}>
                 <Move className="h-4 w-4 mr-2" />
                 Mover para Cima
               </DropdownMenuItem>
-              
               <DropdownMenuItem onClick={() => handleMove('down')}>
                 <Move className="h-4 w-4 mr-2" />
                 Mover para Baixo
               </DropdownMenuItem>
-              
               <DropdownMenuSeparator />
-              
               <DropdownMenuItem onClick={handleToggleVisibility}>
-                {isVisible ? (
-                  <>
-                    <EyeOff className="h-4 w-4 mr-2" />
-                    Ocultar Seção
-                  </>
-                ) : (
-                  <>
-                    <Eye className="h-4 w-4 mr-2" />
-                    Mostrar Seção
-                  </>
-                )}
+                <Eye className="h-4 w-4 mr-2" />
+                Ocultar Seção
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       )}
 
-      {/* Section Content */}
-      <div className={`${isEditMode ? 'relative' : ''}`}>
+      {/* Conteúdo da Seção */}
+      <div className={canShowControls ? 'border-2 border-dashed border-transparent hover:border-brand-teal rounded-lg transition-all' : ''}>
         {children}
       </div>
-
-      {/* Edit Mode Overlay */}
-      {showControls && (
-        <div className="absolute inset-0 border-2 border-dashed border-brand-teal bg-brand-teal/5 pointer-events-none rounded-lg">
-          <div className="absolute bottom-2 left-2">
-            <Badge className="bg-brand-teal text-white">
-              {title}
-            </Badge>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
