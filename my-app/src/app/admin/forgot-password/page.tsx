@@ -1,22 +1,24 @@
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
-import logoIcon from "figma:asset/4ea0bd7a9b1f8b2bbb511255bac94715ee52ab3d.png";
-import { Link } from "react-router-dom";
+import Image from 'next/image';
+import Link from 'next/link';
 
 export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-light to-white flex items-center justify-center p-6">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center space-x-3 mb-6">
-            <img 
-              src={logoIcon} 
+          <Link href="/" className="flex items-center justify-center space-x-3 mb-6">
+            <Image 
+              src="/img/contabilizetech_logo.png" 
               alt="ContabilizeTech" 
+              width={40}
+              height={40}
               className="h-10 w-10"
             />
             <span className="text-2xl font-semibold text-brand-dark">
               Contabilize<span className="text-brand-teal">Tech</span>
             </span>
-          </div>
+          </Link>
           <h1 className="text-2xl font-semibold text-brand-dark mb-2">
             Recuperar Acesso
           </h1>
@@ -29,7 +31,7 @@ export default function ForgotPasswordPage() {
         
         <div className="mt-6 text-center">
           <Link 
-            to="/admin/login" 
+            href="/admin/login" 
             className="text-sm text-brand-teal hover:text-brand-dark-blue font-medium transition-colors"
           >
             ← Voltar para o login
