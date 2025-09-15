@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import connectDB from './src/config/db.js';
 import authRoutes from './src/routes/auth.js';
-import contentRoutes from './src/routes/contentRoutes.js'; // Corrigido para o nome de arquivo correto
+import contentRoutes from './src/routes/content.js'; // Corrigido para o nome de arquivo correto
 import userRoutes from './src/routes/userRoutes.js';
 import partnerRoutes from './src/routes/partnerRoutes.js';
 
