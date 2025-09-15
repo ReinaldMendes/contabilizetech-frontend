@@ -75,3 +75,28 @@ export const deleteContent = async (req, res) => {
     res.status(500).json({ message: 'Erro no servidor', error: error.message });
   }
 };
+export const updateImageContent = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nenhum arquivo enviado.' });
+    }
+
+    const { key } = req.body;
+    if (!key) {
+      return res.status(400).json({ message: 'A chave do conteúdo (key) é obrigatória.' });
+    }
+
+    // A URL pública da imagem no Cloudinary está em req.file.path
+    const imageUrl = req.file.path;
+
+    const updatedItem = await ContentItem.findOneAndUpdate(
+      { key },
+      { value: imageUrl },
+      { new: true, upsert: true }
+    );
+
+    res.status(200).json({ message: 'Imagem salva e conteúdo atualizado.', item: updatedItem });
+  } catch (error) {
+    res.status(500).json({ message: 'Erro no servidor', error: error.message });
+  }
+};

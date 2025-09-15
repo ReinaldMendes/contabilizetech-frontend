@@ -4,10 +4,12 @@ import {
   getAllContent,
   getContentByKey,
   updateContent,
-  deleteContent
+  deleteContent,
+  updateImageContent // <--- ADICIONADO AQUI
 } from '../controllers/contentController.js';
 import { authMiddleware } from '../middleware/authMiddleware.js';
 import { adminMiddleware } from '../middleware/adminMiddleware.js';
+import upload from '../config/multerConfig.js';
 
 const router = express.Router();
 
@@ -22,5 +24,13 @@ router.get('/:key', getContentByKey);
 router.post('/', authMiddleware, adminMiddleware, createContent);
 router.put('/:key', authMiddleware, adminMiddleware, updateContent);
 router.delete('/:key', authMiddleware, adminMiddleware, deleteContent);
+
+// Rota para upload de imagem
+router.post('/upload/image', 
+  authMiddleware, 
+  adminMiddleware, 
+  upload.single('imageFile'), // 'imageFile' é o nome do campo do formulário
+  updateImageContent
+);
 
 export default router;
