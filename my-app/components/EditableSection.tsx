@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator
 } from './ui/dropdown-menu';
-import { useEdit } from '../src/contexts/EditContext';
+const { isEditMode } = useEdit();
 import { useAuth } from '../src/contexts/AuthContext';
 
 interface EditableSectionProps {
