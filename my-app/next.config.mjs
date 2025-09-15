@@ -18,9 +18,6 @@ const nextConfig = {
       },
     ],
   },
-  eslint: {
-    dirs: ['pages', 'components', 'app', 'src'],
-  },
   typescript: {
     tsconfigPath: './tsconfig.json',
   },
