@@ -37,7 +37,6 @@ app.use(cors(corsOptions));
 
 // --- FIM DA CONFIGURAÇÃO DO CORS ---
 
-
 // Middlewares
 app.use(express.json());
 
