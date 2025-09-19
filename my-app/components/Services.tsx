@@ -1,113 +1,42 @@
-import { Card, CardContent } from "./ui/card";
-import { EditableText } from "./EditableText";
-import { 
-  Calculator,
-  Scale,
-  Shield,
-  TrendingUp,
-  Building2,
-  Users
-} from "lucide-react";
+"use client";
 
-const services = [
-  {
-    icon: Calculator,
-    titleKey: "services.item1.title",
-    descriptionKey: "services.item1.description",
-    titleFallback: "Contabilidade Completa",
-    descriptionFallback: "Planejamento tributário, obrigações fiscais e gestão financeira."
-  },
-  {
-    icon: Scale,
-    titleKey: "services.item2.title",
-    descriptionKey: "services.item2.description",
-    titleFallback: "Assessoria Jurídica",
-    descriptionFallback: "Contratos, compliance, governança e suporte estratégico em negociações."
-  },
-  {
-    icon: Shield,
-    titleKey: "services.item3.title",
-    descriptionKey: "services.item3.description",
-    titleFallback: "Governança Corporativa",
-    descriptionFallback: "Estruturação de conselhos, boas práticas e acompanhamento regulatório."
-  },
-  {
-    icon: TrendingUp,
-    titleKey: "services.item4.title",
-    descriptionKey: "services.item4.description",
-    titleFallback: "Smart Money para Startups",
-    descriptionFallback: "Orientação estratégica, marketplace, captação de recursos e preparação para IPO."
-  },
-  {
-    icon: Building2,
-    titleKey: "services.item5.title",
-    descriptionKey: "services.item5.description",
-    titleFallback: "Consultoria para Franquias",
-    descriptionFallback: "Expansão de unidades, gestão tributária e suporte jurídico especializado."
-  },
-  {
-    icon: Users,
-    titleKey: "services.item6.title",
-    descriptionKey: "services.item6.description",
-    titleFallback: "Acompanhamento Estratégico",
-    descriptionFallback: "Presença em reuniões, apoio em ajustes contratuais e equilíbrio de interesses entre stakeholders."
-  }
+import { BrainCircuit, FileText, Briefcase, BarChart, Users } from "lucide-react";
+import { EditableText } from "./EditableText";
+
+const serviceItems = [
+  { icon: BrainCircuit, key: "services.item1", fallbackTitle: "Contabilidade Inteligente", fallbackDesc: "Automação e IA para otimizar suas finanças e impostos." },
+  { icon: FileText, key: "services.item2", fallbackTitle: "Gestão Fiscal Completa", fallbackDesc: "Mantenha-se em dia com todas as obrigações fiscais sem dor de cabeça." },
+  { icon: Briefcase, key: "services.item3", fallbackTitle: "Consultoria Estratégica", fallbackDesc: "Decisões baseadas em dados para impulsionar o crescimento do seu negócio." },
+  // Adicione mais serviços se necessário
 ];
 
-export function Services() {
+export function Services({ content }: { content: { [key: string]: string } }) {
   return (
     <section id="services" className="py-20 bg-white">
       <div className="container mx-auto max-w-6xl px-6">
-        {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-h2 text-brand-dark mb-4">
-            <EditableText
-              contentKey="services.title"
-              fallback="Nossos Serviços"
-              as="span"
-            />
+            <EditableText contentKey="services.title" fallback="Soluções Completas para sua Empresa" />
           </h2>
           <p className="text-body text-gray-600 max-w-2xl mx-auto">
-            <EditableText
-              contentKey="services.description"
-              fallback="Soluções integradas para startups e franquias, do planejamento estratégico à execução, garantindo conformidade e crescimento sustentável."
-              type="textarea"
-            />
+            <EditableText contentKey="services.description" fallback="Oferecemos um ecossistema completo de serviços para garantir a saúde financeira e o crescimento sustentável do seu negócio." type="textarea" />
           </p>
         </div>
-
-        {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <Card 
-              key={index} 
-              className="border-0 shadow-lg hover-lift bg-white group cursor-pointer"
-            >
-              <CardContent className="p-8">
-                <div className="mb-6">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand-teal/10 to-brand-dark-blue/10 flex items-center justify-center group-hover:from-brand-teal/20 group-hover:to-brand-dark-blue/20 transition-all duration-300">
-                    <service.icon className="h-7 w-7 text-brand-teal group-hover:scale-110 transition-transform duration-300" />
-                  </div>
-                </div>
-                
-                <h3 className="text-xl font-semibold text-brand-dark mb-3 group-hover:text-brand-teal transition-colors">
-                  <EditableText
-                    contentKey={service.titleKey}
-                    fallback={service.titleFallback}
-                    as="span"
-                  />
+          {serviceItems.map(item => {
+            const Icon = item.icon;
+            return (
+              <div key={item.key} className="p-8 bg-gray-50 rounded-lg shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                <Icon className="h-10 w-10 text-brand-teal mb-4" />
+                <h3 className="text-xl font-semibold text-brand-dark mb-2">
+                  <EditableText contentKey={`${item.key}.title`} fallback={item.fallbackTitle} />
                 </h3>
-                
-                <p className="text-body text-gray-600 leading-relaxed">
-                  <EditableText
-                    contentKey={service.descriptionKey}
-                    fallback={service.descriptionFallback}
-                    type="textarea"
-                  />
+                <p className="text-gray-600">
+                  <EditableText contentKey={`${item.key}.description`} fallback={item.fallbackDesc} type="textarea"/>
                 </p>
-              </CardContent>
-            </Card>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

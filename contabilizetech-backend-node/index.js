@@ -6,7 +6,7 @@ import authRoutes from './src/routes/auth.js';
 import contentRoutes from './src/routes/content.js';
 import userRoutes from './src/routes/userRoutes.js';
 import partnerRoutes from './src/routes/partnerRoutes.js';
-
+import pageRoutes from './src/routes/pageRoutes.js';
 const app = express();
 
 // 🔹 Conexão com o banco
@@ -46,7 +46,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/content', contentRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/partners', partnerRoutes);
-
+app.use('/api/pages', pageRoutes);
 // 🔹 Rota de teste
 app.get('/api/ping', (req, res) => {
   res.json({ message: '✅ API rodando no Render!' });

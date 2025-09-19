@@ -97,3 +97,7 @@ export const partnersAPI = {
   }),
   delete: (id: string) => api.delete(`/partners/${id}`),
 };
+export const pageAPI = {
+  getBySlug: (slug: string) => api.get(`/pages/${slug}`),
+  updateSections: (slug: string, sections: any[]) => api.put(`/pages/${slug}/sections`, { sections }),
+};

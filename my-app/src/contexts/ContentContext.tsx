@@ -1,56 +1,62 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
-import { contentAPI } from '@/utils/api'; // Importa apenas o que é necessário
+import { pageAPI } from '@/utils/api';
 
-interface Content {
-  [key: string]: string;
+// Tipagem para uma seção individual
+interface Section {
+  _id: string;
+  componentName: string;
+  order: number;
+  content: { [key: string]: string };
 }
 
+// Tipagem para o valor do nosso contexto
 interface ContentContextType {
-  content: Content;
+  sections: Section[];
+  content: { [key: string]: string };
   isLoading: boolean;
   refreshContent: () => Promise<void>;
+  setSections: React.Dispatch<React.SetStateAction<Section[]>>;
 }
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
 
 export function ContentProvider({ children }: { children: ReactNode }) {
-  const [content, setContent] = useState<Content>({});
+  const [sections, setSections] = useState<Section[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Função central para buscar o conteúdo da API
-  const loadContent = useCallback(async () => {
+  const fetchPageStructure = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Usa a função 'getAll' do nosso contentAPI e acessa 'response.data'
-      const response = await contentAPI.getAll();
-      if (response.data && typeof response.data === 'object') {
-        setContent(response.data);
-        console.log("Content loaded successfully from API");
-      } else {
-        // Fallback em caso de resposta inesperada
-        setContent({}); 
+      const response = await pageAPI.getBySlug('home');
+      if (response.data && response.data.sections) {
+        const sortedSections = response.data.sections.sort((a, b) => a.order - b.order);
+        setSections(sortedSections);
       }
     } catch (error) {
-      console.error("Error loading content:", error);
-      // Em caso de erro, você pode definir um conteúdo de fallback aqui se desejar
-      setContent({});
+      console.error("Erro ao carregar a estrutura da página:", error);
+      setSections([]);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Carrega o conteúdo na primeira vez que a aplicação monta
   useEffect(() => {
-    loadContent();
-  }, [loadContent]);
+    fetchPageStructure();
+  }, [fetchPageStructure]);
+
+  const content = sections.reduce((acc, section) => {
+    return { ...acc, ...section.content };
+  }, {});
 
   return (
     <ContentContext.Provider value={{
+      sections,
       content,
       isLoading,
-      refreshContent: loadContent // A função de refresh é a própria função de buscar
+      refreshContent: fetchPageStructure,
+      setSections,
     }}>
       {children}
     </ContentContext.Provider>
