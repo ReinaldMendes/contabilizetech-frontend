@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent } from "./ui/card";
 import { Star } from "lucide-react";
 import { EditableImage } from "./EditableImage";
@@ -7,7 +9,6 @@ import { useContent } from "@/contexts/ContentContext";
 export function Testimonials() {
   const { content } = useContent();
 
-  // 1. Criamos a estrutura de dados dinamicamente a partir do ContentContext
   const testimonialsData = [
     {
       nameKey: "testimonials.item1.name",
@@ -17,7 +18,7 @@ export function Testimonials() {
       fallback: {
         name: "Maria Silva",
         role: "CEO, TechStart",
-        image: "/img/testimonial-2.png", // Imagem de fallback local
+        image: "/images/testimonial-1.png",
         content: "A ContabilizeTech transformou nossa gestão financeira. A automação nos permitiu focar no crescimento do negócio, enquanto eles cuidam de toda parte contábil com excelência."
       }
     },
@@ -29,7 +30,7 @@ export function Testimonials() {
       fallback: {
         name: "João Santos",
         role: "Diretor Financeiro, Commerce Plus",
-        image: "/img/testimonial-1.png",
+        image: "/images/testimonial-2.png",
         content: "Relatórios em tempo real e automação completa. Nossa empresa cresceu 40% no último ano e a ContabilizeTech foi fundamental nessa jornada."
       }
     },
@@ -41,22 +42,27 @@ export function Testimonials() {
       fallback: {
         name: "Ana Costa",
         role: "Sócia, Consultoria Estratégica",
-        image: "/img/testimonial-3.png",
+        image: "/images/testimonial-3.png",
         content: "Migrar para a ContabilizeTech foi a melhor decisão. Suporte 24/7, tecnologia avançada e equipe sempre disponível. Recomendo para todas as empresas."
       }
     }
   ];
 
   return (
-    <section className="py-20 bg-white">
-      <div className="container mx-auto max-w-6xl px-6">
+    <section className="py-20 relative overflow-hidden">
+      {/* Imagem de fundo sutil */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none"
+        style={{ backgroundImage: 'url(/img/background-pattern.png)' }}
+      ></div>
+
+      <div className="container mx-auto max-w-6xl px-6 relative z-10">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-h2 text-brand-dark mb-4">
-            {/* 2. Título e descrição agora são editáveis */}
+          <h2 className="text-h2 text-white mb-4">
             <EditableText contentKey="testimonials.title" fallback="O que nossos clientes dizem" as="span" />
           </h2>
-          <p className="text-body text-gray-600 max-w-2xl mx-auto">
+          <p className="text-body text-gray-300 max-w-2xl mx-auto">
             <EditableText contentKey="testimonials.description" fallback="Empresas de todos os tamanhos confiam na ContabilizeTech para automatizar sua gestão contábil e impulsionar seus resultados." type="textarea" />
           </p>
         </div>
@@ -78,7 +84,6 @@ export function Testimonials() {
                 
                 <div className="flex items-center mt-auto">
                   <div className="w-12 h-12 rounded-full overflow-hidden mr-4 flex-shrink-0">
-                    {/* 3. Imagem do autor agora é editável */}
                     <EditableImage
                       contentKey={testimonial.imageKey}
                       fallback={testimonial.fallback.image}
@@ -109,7 +114,7 @@ export function Testimonials() {
               <div className="text-3xl font-bold text-brand-teal mb-2">
                 <EditableText contentKey="testimonials.stat1.value" fallback="98%" as="span" />
               </div>
-              <div className="text-gray-600">
+              <div className="text-gray-300">
                 <EditableText contentKey="testimonials.stat1.label" fallback="Taxa de satisfação" as="span" />
               </div>
             </div>
@@ -117,7 +122,7 @@ export function Testimonials() {
               <div className="text-3xl font-bold text-brand-teal mb-2">
                 <EditableText contentKey="testimonials.stat2.value" fallback="500+" as="span" />
               </div>
-              <div className="text-gray-600">
+              <div className="text-gray-300">
                 <EditableText contentKey="testimonials.stat2.label" fallback="Empresas atendidas" as="span" />
               </div>
             </div>
@@ -125,7 +130,7 @@ export function Testimonials() {
               <div className="text-3xl font-bold text-brand-teal mb-2">
                 <EditableText contentKey="testimonials.stat3.value" fallback="24/7" as="span" />
               </div>
-              <div className="text-gray-600">
+              <div className="text-gray-300">
                 <EditableText contentKey="testimonials.stat3.label" fallback="Suporte disponível" as="span" />
               </div>
             </div>

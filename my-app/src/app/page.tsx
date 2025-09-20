@@ -14,13 +14,13 @@ export default function Home() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       {isAuthenticated && <AdminBar />}
       <Header />
       <main>
         <Hero />
-        <Features />
         <Services />
+        <Features />
         <Partners />
         <Testimonials />
         <FAQ />

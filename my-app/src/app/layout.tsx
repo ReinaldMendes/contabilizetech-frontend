@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { ContentProvider } from '@/contexts/ContentContext';
 import { EditProvider } from '@/contexts/EditContext';
-import { FloatingWhatsApp } from '@/components/FloatingWhatsApp'; // 1. Importe o componente
+import { FloatingWhatsApp } from '@/components/FloatingWhatsApp';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -43,14 +43,25 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={inter.className}>
-        <AuthProvider>
-          <ContentProvider>
-            <EditProvider>
-              {children}
-              <FloatingWhatsApp /> {/* 2. Adicione o componente aqui */}
-            </EditProvider>
-          </ContentProvider>
-        </AuthProvider>
+        {/* 1. Wrapper principal para controlar o fundo */}
+        <div className="relative min-h-screen bg-brand-dark-blue text-gray-200">
+          {/* 2. Camada da imagem de fundo transparente */}
+          <div className="absolute inset-0 bg-main-pattern bg-repeat opacity-5 pointer-events-none z-0"></div>
+          
+          {/* 3. Camada do conteúdo, por cima do fundo */}
+          <div className="relative z-10 flex flex-col min-h-screen">
+            <AuthProvider>
+              <ContentProvider>
+                <EditProvider>
+                  <div className="flex-grow">
+                    {children}
+                  </div>
+                  <FloatingWhatsApp />
+                </EditProvider>
+              </ContentProvider>
+            </AuthProvider>
+          </div>
+        </div>
       </body>
     </html>
   );

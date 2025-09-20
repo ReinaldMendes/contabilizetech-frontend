@@ -36,6 +36,9 @@ const config: Config = {
           },
         },
       },
+      backgroundImage: {
+        'main-pattern': "url('/img/background-pattern.png')",
+      },
     },
   },
   plugins: [

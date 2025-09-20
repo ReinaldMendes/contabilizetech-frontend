@@ -80,7 +80,7 @@ export function FAQ() {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-gray-50 to-white">
+    <section className="py-20 lg:py-32 bg-gradient-to-br from-gray-50 to-white">
       <div className="container mx-auto max-w-4xl px-6">
         {/* Header */}
         <div className="text-center mb-16">
@@ -104,14 +104,14 @@ export function FAQ() {
               value={`item-${index}`}
               className="bg-white rounded-lg shadow-sm border border-gray-200 px-6"
             >
-              <AccordionTrigger className="text-left font-medium ...">
-                  <EditableText 
-                    contentKey={faq.questionKey} 
-                    fallback={faq.fallback.question}
-                    isButtonChild={true} // <-- ADICIONE ESTA PROP
-                  />
+              <AccordionTrigger className="text-left font-medium text-brand-dark hover:text-brand-teal transition-colors text-lg">
+                <EditableText 
+                  contentKey={faq.questionKey} 
+                  fallback={faq.fallback.question}
+                  isButtonChild={true}
+                />
               </AccordionTrigger>
-              <AccordionContent className="text-gray-700 leading-relaxed">
+              <AccordionContent className="text-gray-700 leading-relaxed pt-2">
                 <EditableText contentKey={faq.answerKey} fallback={faq.fallback.answer} type="textarea" />
               </AccordionContent>
             </AccordionItem>
@@ -135,7 +135,7 @@ export function FAQ() {
             </a>
             <span className="hidden sm:inline text-gray-400">•</span>
             <a 
-              href={`tel:${content['footer.contact.phone'] || '+5511999999999'}`}
+              href={`tel:${(content['footer.contact.phone'] || '').replace(/\D/g, '')}`}
               className="text-brand-teal hover:text-brand-dark transition-colors"
             >
               <EditableText contentKey="footer.contact.phone" fallback="(11) 99999-9999" />

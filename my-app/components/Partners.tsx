@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, FormEvent } from 'react';
+import React, { useState, useEffect, useCallback, FormEvent } from 'react';
 import Image from 'next/image';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEdit } from '@/contexts/EditContext';
@@ -18,8 +18,9 @@ import {
 } from './ui/dialog';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { PlusCircle, Trash2, Loader2 } from 'lucide-react';
+import { PlusCircle, Trash2, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { EditableText } from './EditableText';
+import useEmblaCarousel from 'embla-carousel-react';
 
 type Partner = {
   _id?: string;
@@ -44,6 +45,26 @@ export function Partners() {
   const [newPartnerName, setNewPartnerName] = useState('');
   const [newPartnerFile, setNewPartnerFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'start' });
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+
+  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setPrevBtnDisabled(!emblaApi.canScrollPrev());
+    setNextBtnDisabled(!emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reinit', onSelect);
+    onSelect();
+  }, [emblaApi, onSelect]);
 
   const fetchPartners = async () => {
     setIsLoading(true);
@@ -103,12 +124,13 @@ export function Partners() {
     }
   };
 
-  const extendedPartners = [...partners, ...partners];
-
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="container mx-auto max-w-6xl px-6">
+    <section className="py-20 lg:py-32 bg-white">
+      <div className="container mx-auto max-w-7xl px-6">
         <div className="text-center mb-16">
+          <p className="text-sm font-bold text-brand-teal uppercase tracking-wider mb-2">
+            <EditableText contentKey="partners.subheading" fallback="Confiança e Credibilidade" />
+          </p>
           <h2 className="text-h2 text-brand-dark mb-4">
             <EditableText contentKey="partners.title" fallback="Empresas que Confiam na Gente" />
           </h2>
@@ -116,41 +138,56 @@ export function Partners() {
             <EditableText contentKey="partners.description" fallback="Parceiros que escolheram a ContabilizeTech para impulsionar seus negócios com soluções contábeis e estratégicas de excelência." type="textarea" />
           </p>
           {isAdmin && isEditMode && (
-            <Button onClick={() => setIsModalOpen(true)} className="mt-4 bg-brand-gradient">
+            <Button onClick={() => setIsModalOpen(true)} className="mt-6 bg-brand-gradient">
               <PlusCircle className="mr-2 h-4 w-4" />
               Adicionar Parceiro
             </Button>
           )}
         </div>
 
-        <div className="relative overflow-hidden group/slider">
-          <div className="flex animate-scroll group-hover/slider:pause">
-            {extendedPartners.map((partner, index) => (
-              <div key={`${partner.name}-${index}`} className="relative flex-shrink-0 mx-8 w-48 h-24 flex items-center justify-center bg-white rounded-lg shadow-sm">
-                <Image 
-                  src={partner.imageUrl} 
-                  alt={partner.name} 
-                  fill 
-                  style={{ objectFit: 'contain' }} 
-                  className="px-4"
-                  sizes="(max-width: 768px) 50vw, 192px" // <-- MUDANÇA APLICADA AQUI
-                />
-                {isAdmin && isEditMode && partner._id && (
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="absolute -top-2 -right-2 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => handleDeletePartner(partner._id!)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-            ))}
+        <div className="relative group/slider">
+          <div className="absolute top-0 bottom-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+          
+          <div className="overflow-hidden" ref={emblaRef}>
+            <div className="flex">
+              {partners.map((partner) => (
+                <div key={partner._id || partner.name} className="relative flex-[0_0_50%] sm:flex-[0_0_33.33%] lg:flex-[0_0_25%] p-6">
+                  <div className="relative w-full h-40 flex items-center justify-center p-4 group">
+                    <Image
+                      src={partner.imageUrl}
+                      alt={partner.name}
+                      fill
+                      style={{ objectFit: 'contain' }}
+                      // REMOVIDO: grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100
+                      className="transition-all duration-300" // Mantemos a transição caso queira adicionar outro hover futuramente
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                    {isAdmin && isEditMode && partner._id && (
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="absolute -top-2 -right-2 h-7 w-7 rounded-full opacity-0 group-hover:opacity-100"
+                        onClick={() => handleDeletePartner(partner._id!)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
+          
+          <Button onClick={scrollPrev} disabled={prevBtnDisabled} className="absolute top-1/2 left-0 -translate-y-1/2 -translate-x-6 rounded-full h-12 w-12 opacity-0 group-hover/slider:opacity-100 transition-opacity z-20" size="icon">
+            <ChevronLeft />
+          </Button>
+          <Button onClick={scrollNext} disabled={nextBtnDisabled} className="absolute top-1/2 right-0 -translate-y-1/2 translate-x-6 rounded-full h-12 w-12 opacity-0 group-hover/slider:opacity-100 transition-opacity z-20" size="icon">
+            <ChevronRight />
+          </Button>
         </div>
       </div>
-
+      
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
           <DialogHeader>

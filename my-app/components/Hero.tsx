@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Play, ArrowRight, Star, Users, Award } from "lucide-react";
+import { ArrowRight, Star, Users, Award } from "lucide-react";
 import { ScheduleModal } from "./ScheduleModal";
 import { EditableText } from "./EditableText";
 import { EditableImage } from "./EditableImage";
@@ -13,20 +13,20 @@ import { useContent } from "@/contexts/ContentContext";
 export function Hero() {
   const { content } = useContent();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // O 'heroImage' foi removido do useState, agora virá do useContent()
 
   return (
     <EditableSection 
       id="hero-section" 
       title="Seção Hero"
-      className="relative min-h-screen bg-gradient-to-br from-brand-light via-white to-brand-light/50 overflow-hidden"
+      className="relative min-h-screen bg-brand-magnetic-blue text-white overflow-hidden"
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(46,175,154,0.1),transparent_50%)] pointer-events-none"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(21,52,71,0.05),transparent_50%)] pointer-events-none"></div>
+      {/* Imagem de fundo transparente */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center opacity-10 pointer-events-none"
+        style={{ backgroundImage: 'url(/img/hero-image.png)' }}
+      ></div>
       
-      <div className="relative pt-20 pb-16 sm:pt-32 sm:pb-24">
+      <div className="relative pt-20 pb-16 sm:pt-32 sm:pb-24 z-10">
         <div className="container mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             
@@ -34,7 +34,7 @@ export function Hero() {
             <div className="space-y-8">
               {/* Badge */}
               <div className="flex">
-                <Badge className="bg-brand-teal/10 text-brand-teal border border-brand-teal/20 px-4 py-2 hover:bg-brand-teal/20 transition-colors">
+                <Badge className="bg-white/10 text-white border border-white/20 px-4 py-2 hover:bg-white/20 transition-colors">
                   <Star className="h-4 w-4 mr-2 fill-current" />
                   <EditableText 
                     contentKey="hero.badge"
@@ -46,7 +46,7 @@ export function Hero() {
 
               {/* Main Heading */}
               <div className="space-y-4">
-                <h1 className="text-hero text-brand-dark leading-tight">
+                <h1 className="text-hero text-white leading-tight">
                   <EditableText 
                     contentKey="hero.title"
                     fallback="Contabilidade Automatizada para o Futuro do seu Negócio"
@@ -55,7 +55,7 @@ export function Hero() {
                   />
                 </h1>
                 
-                <p className="text-xl text-gray-600 leading-relaxed max-w-2xl">
+                <p className="text-xl text-gray-300 leading-relaxed max-w-2xl">
                   <EditableText 
                     contentKey="hero.subtitle"
                     fallback="Automatize sua contabilidade com tecnologia de ponta. Mais tempo para focar no que realmente importa: o crescimento do seu negócio."
@@ -67,24 +67,24 @@ export function Hero() {
               {/* Stats */}
               <div className="flex flex-wrap gap-6">
                 <div className="flex items-center space-x-2">
-                  <Users className="h-5 w-5 text-brand-teal" />
+                  <Users className="h-5 w-5 text-white" />
                   <div>
-                    <span className="font-semibold text-brand-dark">
+                    <span className="font-semibold text-white">
                       <EditableText contentKey="hero.stat1.number" fallback="500+" as="span" />
                     </span>
-                    <span className="text-sm text-gray-600 ml-1">
+                    <span className="text-sm text-gray-300 ml-1">
                       <EditableText contentKey="hero.stat1.label" fallback="Empresas atendidas" as="span" />
                     </span>
                   </div>
                 </div>
                 
                 <div className="flex items-center space-x-2">
-                  <Award className="h-5 w-5 text-brand-teal" />
+                  <Award className="h-5 w-5 text-white" />
                   <div>
-                    <span className="font-semibold text-brand-dark">
+                    <span className="font-semibold text-white">
                       <EditableText contentKey="hero.stat2.number" fallback="98%" as="span" />
                     </span>
-                    <span className="text-sm text-gray-600 ml-1">
+                    <span className="text-sm text-gray-300 ml-1">
                       <EditableText contentKey="hero.stat2.label" fallback="Satisfação" as="span" />
                     </span>
                   </div>
@@ -108,14 +108,13 @@ export function Hero() {
                 </Button>
                 
                 <Button 
-                  variant="outline" 
                   size="lg"
-                  className="border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white transition-all duration-300 group"
+                  className="bg-white/20 text-white backdrop-blur-sm border border-white/30 hover:bg-white/30 transition-all duration-300 group"
+                  onClick={() => setIsModalOpen(true)}
                 >
-                  <Play className="mr-2 h-5 w-5 group-hover:scale-110 transition-transform" />
                   <EditableText 
                     contentKey="hero.cta.secondary"
-                    fallback="Ver Demonstração"
+                    fallback="Fale Agora Conosco"
                     isButtonChild={true}
                     as="span"
                   />
@@ -123,24 +122,24 @@ export function Hero() {
               </div>
 
               {/* Trust Indicators */}
-              <div className="pt-8 border-t border-gray-200">
-                <p className="text-sm text-gray-600 mb-4">
+              <div className="pt-8 border-t border-white/20">
+                <p className="text-sm text-gray-300 mb-4">
                   <EditableText 
                     contentKey="hero.trust.title"
                     fallback="Confiado por empresas de todos os portes"
                   />
                 </p>
-                <div className="flex items-center space-x-6 opacity-60">
-                  <span className="font-semibold text-gray-400">
+                <div className="flex items-center space-x-6 opacity-70">
+                  <span className="font-semibold text-gray-300">
                     <EditableText contentKey="hero.trust.partner1" fallback="Microsoft" as="span" />
                   </span>
-                  <span className="font-semibold text-gray-400">
+                  <span className="font-semibold text-gray-300">
                     <EditableText contentKey="hero.trust.partner2" fallback="Google" as="span" />
                   </span>
-                  <span className="font-semibold text-gray-400">
+                  <span className="font-semibold text-gray-300">
                     <EditableText contentKey="hero.trust.partner3" fallback="Amazon" as="span" />
                   </span>
-                  <span className="font-semibold text-gray-400">
+                  <span className="font-semibold text-gray-300">
                     <EditableText contentKey="hero.trust.partner4" fallback="Apple" as="span" />
                   </span>
                 </div>
@@ -155,7 +154,7 @@ export function Hero() {
                   fallback="/img/hero-image.png"
                   alt="Contabilidade Digital"
                   width={1000}
-                  height={800} // Ajuste a altura conforme a proporção da imagem
+                  height={800}
                   priority
                   className="rounded-2xl shadow-2xl w-full h-auto"
                 />
@@ -182,8 +181,8 @@ export function Hero() {
       </div>
 
       <ScheduleModal 
-      open={isModalOpen} 
-      onOpenChange={setIsModalOpen} 
+        open={isModalOpen} 
+        onOpenChange={setIsModalOpen} 
       />
     </EditableSection>
   );
