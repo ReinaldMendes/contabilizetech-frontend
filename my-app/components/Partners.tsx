@@ -62,7 +62,7 @@ export function Partners() {
   useEffect(() => {
     if (!emblaApi) return;
     emblaApi.on('select', onSelect);
-    emblaApi.on('reinit', onSelect);
+    emblaApi.on('reInit', onSelect);
     onSelect();
   }, [emblaApi, onSelect]);
 
